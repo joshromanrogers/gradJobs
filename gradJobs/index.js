@@ -4,9 +4,8 @@ const path = require('path');
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'))
-});
+// SET STATIC FOLDER
+app.use(express.static(path.join(__dirname, 'public')));
 
 // GET API INFO FROM REED
 request.get(' https://www.reed.co.uk/api/1.0/search?keywords=graduate', {
