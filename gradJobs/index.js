@@ -1,21 +1,14 @@
 const express = require('express');
 var request = require('request');
+const path = require('path'); 
 
 const app = express();
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
 });
 
-// request.get('https://www.reed.co.uk/api/1.0/search?keywords=accountant', {
-//     'auth': {
-//         'user': '417100be-8a8c-46f8-8663-ef89647a035e',
-//         'pass': ''
-//         // 'sendImmediately': false
-//     }
-// });
- 
-
+// GET API INFO FROM REED
 request.get(' https://www.reed.co.uk/api/1.0/search?keywords=graduate', {
   'auth': {
     'user': '417100be-8a8c-46f8-8663-ef89647a035e',
