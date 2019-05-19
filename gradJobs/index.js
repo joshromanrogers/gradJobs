@@ -3,10 +3,10 @@ var request = require("request");
 const path = require("path");
 const mongoose = require("mongoose");
 const jobs = require("./Jobs");
-const fs = require('fs')
+const fs = require("fs");
 
 // require the mongodb package and you get the MongoClient object from it.
-var mongoClient = require("mongodb").MongoClient;
+// var mongoClient = require("mongodb").MongoClient;
 
 // INIT THE APP
 const app = express();
@@ -18,20 +18,32 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate", {
 		"pass": "",
 	}
 }, (err, res, body) => {
-    // parse JSON + store in file called 'reedJobs'
+	// parse JSON + store in file called 'reedJobs'
     var info = JSON.parse(body);
-    storeData(info.results, './reedJobs');
+    var importantInfo = [];
+    info.results.map( job => {
+        job = {
+            title: job.jobTitle,
+            location: job.locationName,
+            date: job.date,
+            url: job.jobUrl
+        }
+        importantInfo.push(job);
+    });
+
+    
+	storeData( importantInfo, "./reedJobs");
     
 });
 
 // function that takes parsed JSON + writes it to specified path
 const storeData = (data, path) => {
-  try {
-    fs.writeFileSync(path, JSON.stringify(data))
-  } catch (err) {
-    console.error(err)
-  }
-}
+	try {
+		fs.writeFileSync(path, JSON.stringify(data));
+	} catch (err) {
+		console.error(err);
+	}
+};
 
 
 // create url to mongoDB server
