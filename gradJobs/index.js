@@ -2,20 +2,14 @@ const express = require("express");
 var request = require("request");
 const path = require("path");
 const mongoose = require("mongoose");
-const members = require("./Members");
+const jobs = require("./Jobs");
+const fs = require('fs')
 
+// require the mongodb package and you get the MongoClient object from it.
+var mongoClient = require("mongodb").MongoClient;
+
+// INIT THE APP
 const app = express();
-
-
-// mongoose.connect("mongodb+srv://romanrogers:" + process.env.MONGO_ATLAS_PW + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
-// 	useNewUrlParser: true
-// });
-
-app.use("/api/members", require("./routes/api/members"));
-
-
-// SET STATIC FOLDER
-app.use(express.static(path.join(__dirname, "public")));
 
 // GET API INFO FROM REED
 request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate", {
@@ -24,12 +18,57 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate", {
 		"pass": "",
 	}
 }, (err, res, body) => {
-	var info = JSON.parse(body);
-	var results = info.results;
-	results.forEach(result => {
-		// console.log(result.jobId);
-	});
+    // parse JSON + store in file called 'reedJobs'
+    var info = JSON.parse(body);
+    storeData(info.results, './reedJobs');
+    
 });
+
+// function that takes parsed JSON + writes it to specified path
+const storeData = (data, path) => {
+  try {
+    fs.writeFileSync(path, JSON.stringify(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+
+// create url to mongoDB server
+// const url = "mongodb://localhost:5000";
+
+
+// mongoose.connect("mongodb+srv://romanrogers:" + process.env.MONGO_ATLAS_PW + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
+// 	useNewUrlParser: true
+// });
+
+app.use("/api/members", require("./routes/api/jobs"));
+
+
+// SET STATIC FOLDER
+app.use(express.static(path.join(__dirname, "public")));
+
+
+
+// var url = "mongodb://localhost:5000";
+
+// MongoClient.connect(url, function (err, db) {
+//     if (err) throw err;
+//     var dbo = db.db("mydb");
+//     var myobj = {
+//         name: "Company Inc",
+//         address: "Highway 37"
+//     };
+//     dbo.collection("customers").insertOne(myobj, function (err, res) {
+//         if (err) throw err;
+//         console.log("1 document inserted");
+//         db.close();
+//     });
+// });
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 
