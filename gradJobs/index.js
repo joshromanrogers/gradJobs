@@ -18,22 +18,27 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate", {
 		"pass": "",
 	}
 }, (err, res, body) => {
-	// parse JSON + store in file called 'reedJobs'
-    var info = JSON.parse(body);
-    var importantInfo = [];
-    info.results.map( job => {
-        job = {
-            title: job.jobTitle,
-            location: job.locationName,
-            date: job.date,
-            url: job.jobUrl
-        }
-        importantInfo.push(job);
-    });
+	// parse JSON, for each result, build an object with the relevant info
+	// + store in a file called 'reedJobs'
+	var info = JSON.parse(body);
+	var importantInfo = [];
+	info.results.map( job => {
+		job = {
+			title: job.jobTitle,
+			location: job.locationName,
+			date: job.date,
+			url: job.jobUrl
+		};
+		importantInfo.push(job);
+	});
+
+    storeData( importantInfo, "./reedJobs.json");
 
     
-	storeData( importantInfo, "./reedJobs");
-    
+    // TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
+    let reedJobsData = fs.readFileSync('reedJobs.json');  
+    let reedJobs = JSON.parse(reedJobsData);  
+    // console.log(reedJobs);
 });
 
 // function that takes parsed JSON + writes it to specified path
