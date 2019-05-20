@@ -1,21 +1,21 @@
 const jobs = [
 	{
-		title: "JS Developer",
-		id: 5,
-		description: "full time mofo",
-		isAvailable: true
-	},
-	{
+		id: '1',
 		title: "FE Developer",
-		id: 5,
-		description: "full time mofobrogo",
-		isAvailable: true
+		date: "12/1/1",
+		url: "http://dfnjsfnds"
 	},
 	{
-		title: "BE Developer",
-		id: 5,
-		description: "full time mofodogo",
-		isAvailable: true
+		id: '2',
+		title: "FE2 Developer",
+		date: "12/1/1",
+		url: "http://dfnjsfnds"
+	},
+	{
+		id: '3',
+		title: "FE3 Developer",
+		date: "12/1/1",
+		url: "http://dfnjsfnds"
 	}
 ];
 

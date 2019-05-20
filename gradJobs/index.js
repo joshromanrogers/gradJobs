@@ -9,10 +9,10 @@ const fs = require("fs");
 // var mongoClient = require("mongodb").MongoClient;
 
 // INIT THE APP
-const app = express();
+const app = express(); 
 
 // GET API INFO FROM REED
-request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate", {
+request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
 	"auth": {
 		"user": "417100be-8a8c-46f8-8663-ef89647a035e",
 		"pass": "",
@@ -25,21 +25,27 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate", {
 	info.results.map( job => {
 		job = {
 			title: job.jobTitle,
-			location: job.locationName,
 			date: job.date,
 			url: job.jobUrl
 		};
 		importantInfo.push(job);
 	});
 
-    storeData( importantInfo, "./reedJobs.json");
+    storeData( importantInfo, "./reedJobs");
+
 
     
-    // TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-    let reedJobsData = fs.readFileSync('reedJobs.json');  
-    let reedJobs = JSON.parse(reedJobsData);  
-    // console.log(reedJobs);
 });
+
+// let query = {'app_id': 'bf713980',
+//          'app_key': '4d5464baa4f5a7acfe792c7185752567',
+//          'content-type': 'application/json',
+//          'results_per_page': '50',
+//          'what': 'entry level'}
+// request.get("http://api.adzuna.com/v1/api/jobs/gb/search/1", {query},
+//  (err, res, body) => {
+//     console.log(body);
+// });
 
 // function that takes parsed JSON + writes it to specified path
 const storeData = (data, path) => {
@@ -55,11 +61,19 @@ const storeData = (data, path) => {
 // const url = "mongodb://localhost:5000";
 
 
-// mongoose.connect("mongodb+srv://romanrogers:" + process.env.MONGO_ATLAS_PW + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
-// 	useNewUrlParser: true
-// });
+mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
+	useNewUrlParser: true
+});
 
-app.use("/api/members", require("./routes/api/jobs"));
+// console.log(encodeURIComponent(process.env.MONGO_ATLAS_PW));
+
+// TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
+let reedJobsData = fs.readFileSync('reedJobs.json');  
+let reedJobs = JSON.parse(reedJobsData);  
+// console.log(reedJobs);
+
+// middleware that forwards /jobs requests to api/routes/jobs file
+app.use("/jobs", require("./api/routes/jobs"));
 
 
 // SET STATIC FOLDER
