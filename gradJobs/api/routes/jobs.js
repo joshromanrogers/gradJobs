@@ -14,7 +14,20 @@ const mongoose = require("mongoose");
 // 5. (DELETE) DELETE A JOB
 
 // GET ALL JOBS
-router.get("/", (req, res, next) => res.json(jobs));
+router.get("/", (req, res, next) => {
+	Job.find()
+		.exec()
+		.then(docs => {
+			console.log(docs);
+			res.status(200).json(docs);
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		});
+});
 
 // GET SINGLE JOB 
 // (colon makes it a dynamic id )
@@ -26,7 +39,13 @@ router.get("/:id", (req, res, next) => {
 		// if it works, print the doc, respond w/ a 200 status + the documentation as JSON
 		.then(doc => {
 			console.log("From database:", doc);
-			res.status(200).json(doc);
+			if (doc) {
+				res.status(200).json(doc);
+			} else {
+				res.status(404).json({
+					message: "no valid data found for provided ID"
+				});
+			}
 		})
 		.catch(err => {
 			// if it doesn't work, print the error + respond w/ a 500 status + a JSON formatted error
@@ -34,8 +53,8 @@ router.get("/:id", (req, res, next) => {
 			res.status(500).json({
 				error: err
 			});
-		}); 
-		
+		});
+
 });
 
 // CREATE A NEW JOB
@@ -51,15 +70,25 @@ router.post("/", (req, res, next) => {
 
 	// save is provided mongoose which can be used on mongoose models,
 	// will store in the DB
-	newJob.save().then(result => {
-		console.log(result);
-	})
-		.catch(err => console.log(err));
+	newJob.
+	save()
+		// if a new job is created, log + respond with 201 status + JSON message
+		.then(result => {
+			console.log(result);
+			res.status(201).json({
+				message: "Handling POST request to /jobs",
+				createdJob: newJob
+			});
+		})
+		// if job creation fails...
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			})
+		});
 
-	res.status(201).json({
-		message: "Handling POST req uest to /jobs",
-		createdJob: newJob
-	});
+
 });
 
 // UPDATE A JOB
@@ -71,9 +100,20 @@ router.patch('/:id', (req, res, next) => {
 
 // DELETE A JOB
 router.delete("/:id", (req, res, next) => {
-	res.status(200).json({
-		message: 'Deleted product!'
-	});
+	const id = req.params.id;
+	Job.remove({
+			_id: id
+		})
+		.exec()
+		.then(result => {
+			res.status(200).json(result);
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		})
 });
 
 module.exports = router;
