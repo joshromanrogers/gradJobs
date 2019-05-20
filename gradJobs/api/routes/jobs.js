@@ -17,17 +17,25 @@ const mongoose = require("mongoose");
 router.get("/", (req, res, next) => res.json(jobs));
 
 // GET SINGLE JOB 
-// colon makes it a dynamic id 
+// (colon makes it a dynamic id )
 router.get("/:id", (req, res, next) => {
-	const found = jobs.some(job => job.id === parseInt(req.params.id));
-
-	if (found) {
-		res.json(jobs.filter(job => job.id === parseInt(req.params.id)));
-	} else {
-		res.status(400).json({
-			msg: `No job with the id of ${req.params.id}`
-		});
-	}
+	// get specific id from request
+	const id = req.params.id;
+	Job.findById(id)
+		.exec()
+		// if it works, print the doc, respond w/ a 200 status + the documentation as JSON
+		.then(doc => {
+			console.log("From database:", doc);
+			res.status(200).json(doc);
+		})
+		.catch(err => {
+			// if it doesn't work, print the error + respond w/ a 500 status + a JSON formatted error
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		}); 
+		
 });
 
 // CREATE A NEW JOB

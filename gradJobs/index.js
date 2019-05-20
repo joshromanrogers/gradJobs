@@ -6,24 +6,42 @@ const jobs = require("./Jobs");
 const fs = require("fs");
 const morgan = require("morgan");
 
-// require the mongodb package and you get the MongoClient object from it.
-// var mongoClient = require("mongodb").MongoClient;
-
 // INIT THE APP
 const app = express(); 
 
-app.use(morgan('dev'));
+// CONNECT TO MONGODB W/ MONGOOSE
+mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
+	useNewUrlParser: true
+});
+
+// middlewares
+app.use(morgan("dev"));
 app.use(express.json());
+
+// middleware that places messages in header to clear CORS errors
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", 
+		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
+	);
+	if (req.method === "OPTIONS") {
+		res.header("Access-Control-Allow-Methods",
+			"PUT, POST, PATCH, DELETE, GET");
+		return res.status(200).json({});
+	}
+	// so other routes can take over when it's done implementing headers
+	next();
+});
 
 // middleware that forwards /jobs requests to api/routes/jobs file
 app.use("/jobs", require("./api/routes/jobs"));
 
 // if the request doesn't fit the abover (/jobs), below code will take care of error
 app.use((req, res, next) => {
-	const error = new Error('Not Found');
+	const error = new Error("Not Found");
 	error.status = 404; 
 	next(error);
-})
+});
 
 app.use((error, req, res, next) => {
 	 res.status(error.status || 500);
@@ -31,8 +49,8 @@ app.use((error, req, res, next) => {
 		 error: {
 			 message: error.message
 		 }
-	 })
-})
+	 });
+});
 
 // GET API INFO FROM REED
 request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
@@ -54,7 +72,7 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 		importantInfo.push(job);
 	});
 
-    storeData( importantInfo, "./reedJobs");
+	storeData( importantInfo, "./reedJobs");
 
 
     
@@ -80,18 +98,10 @@ const storeData = (data, path) => {
 };
 
 
-// create url to mongoDB server
-// const url = "mongodb://localhost:5000";
 
-
-mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
-	useNewUrlParser: true
-});
-
-// console.log(encodeURIComponent(process.env.MONGO_ATLAS_PW));
 
 // TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-let reedJobsData = fs.readFileSync('reedJobs.json');  
+let reedJobsData = fs.readFileSync("reedJobs.json");  
 let reedJobs = JSON.parse(reedJobsData);  
 // console.log(reedJobs);
 
@@ -122,6 +132,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 2000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
