@@ -32,7 +32,7 @@ router.get("/", (req, res, next) => {
 // GET SINGLE JOB 
 // (colon makes it a dynamic id )
 router.get("/:id", (req, res, next) => {
-	// get specific id from request
+	// extract id from request
 	const id = req.params.id;
 	Job.findById(id)
 		.exec()
@@ -71,7 +71,7 @@ router.post("/", (req, res, next) => {
 	// save is provided mongoose which can be used on mongoose models,
 	// will store in the DB
 	newJob.
-	save()
+		save()
 		// if a new job is created, log + respond with 201 status + JSON message
 		.then(result => {
 			console.log(result);
@@ -85,25 +85,37 @@ router.post("/", (req, res, next) => {
 			console.log(err);
 			res.status(500).json({
 				error: err
-			})
+			});
 		});
 
 
 });
 
 // UPDATE A JOB
-router.patch('/:id', (req, res, next) => {
-	res.status(200).json({
-		message: 'Updated product!'
-	});
+router.patch("/:id", (req, res, next) => {
+	const id = req.params.id;
+	const props = req.body;
+	Job.replaceOne({_id: id}, props)
+		.exec()
+		.then(result => {
+			console.log(result);
+			res.status(200).json(result);
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		});
 });
 
 // DELETE A JOB
 router.delete("/:id", (req, res, next) => {
+	// extract id from request
 	const id = req.params.id;
 	Job.remove({
-			_id: id
-		})
+		_id: id
+	})
 		.exec()
 		.then(result => {
 			res.status(200).json(result);
@@ -113,7 +125,7 @@ router.delete("/:id", (req, res, next) => {
 			res.status(500).json({
 				error: err
 			});
-		})
+		});
 });
 
 module.exports = router;
