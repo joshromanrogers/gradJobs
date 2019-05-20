@@ -14,11 +14,11 @@ const mongoose = require("mongoose");
 // 5. (DELETE) DELETE A JOB
 
 // GET ALL JOBS
-router.get("/", (req, res) => res.json(jobs));
+router.get("/", (req, res, next) => res.json(jobs));
 
 // GET SINGLE JOB 
 // colon makes it a dynamic id 
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res, next) => {
 	const found = jobs.some(job => job.id === parseInt(req.params.id));
 
 	if (found) {

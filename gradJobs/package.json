@@ -13,6 +13,7 @@
     "express": "^4.17.0",
     "mongodb": "^3.2.5",
     "mongoose": "^5.5.9",
+    "morgan": "^1.9.1",
     "request": "^2.88.0"
   },
   "devDependencies": {

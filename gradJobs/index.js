@@ -4,12 +4,18 @@ const path = require("path");
 const mongoose = require("mongoose");
 const jobs = require("./Jobs");
 const fs = require("fs");
+const morgan = require("morgan");
 
 // require the mongodb package and you get the MongoClient object from it.
 // var mongoClient = require("mongodb").MongoClient;
 
 // INIT THE APP
 const app = express(); 
+
+app.use(morgan('dev'));
+
+// middleware that forwards /jobs requests to api/routes/jobs file
+app.use("/jobs", require("./api/routes/jobs"));
 
 // GET API INFO FROM REED
 request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
@@ -72,13 +78,11 @@ let reedJobsData = fs.readFileSync('reedJobs.json');
 let reedJobs = JSON.parse(reedJobsData);  
 // console.log(reedJobs);
 
-// middleware that forwards /jobs requests to api/routes/jobs file
-app.use("/jobs", require("./api/routes/jobs"));
+
 
 
 // SET STATIC FOLDER
 app.use(express.static(path.join(__dirname, "public")));
-
 
 
 // var url = "mongodb://localhost:5000";
