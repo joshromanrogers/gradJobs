@@ -13,9 +13,26 @@ const morgan = require("morgan");
 const app = express(); 
 
 app.use(morgan('dev'));
+app.use(express.json());
 
 // middleware that forwards /jobs requests to api/routes/jobs file
 app.use("/jobs", require("./api/routes/jobs"));
+
+// if the request doesn't fit the abover (/jobs), below code will take care of error
+app.use((req, res, next) => {
+	const error = new Error('Not Found');
+	error.status = 404; 
+	next(error);
+})
+
+app.use((error, req, res, next) => {
+	 res.status(error.status || 500);
+	 res.json({
+		 error: {
+			 message: error.message
+		 }
+	 })
+})
 
 // GET API INFO FROM REED
 request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {

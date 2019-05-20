@@ -50,7 +50,7 @@ router.post("/", (req, res, next) => {
 
 	res.status(201).json({
 		message: "Handling POST req uest to /jobs",
-		// createdJOB: newJob
+		createdJob: newJob
 	});
 });
 
