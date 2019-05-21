@@ -7,7 +7,7 @@ const morgan = require("morgan");
 const Jobs = require("./models/job");
 
 // INIT THE APP
-const app = express(); 
+const app = express();
 
 // CONNECT TO MONGODB W/ MONGOOSE
 mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
@@ -21,7 +21,7 @@ app.use(express.json());
 // middleware that places messages in header to clear CORS errors
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", 
+	res.header("Access-Control-Allow-Headers",
 		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
 	);
 	if (req.method === "OPTIONS") {
@@ -39,17 +39,17 @@ app.use("/jobs", require("./api/routes/jobs"));
 // if the request doesn't fit the abover (/jobs), below code will take care of error
 app.use((req, res, next) => {
 	const error = new Error("Not Found");
-	error.status = 404; 
+	error.status = 404;
 	next(error);
 });
 
 app.use((error, req, res, next) => {
-	 res.status(error.status || 500);
-	 res.json({
-		 error: {
-			 message: error.message
-		 }
-	 });
+	res.status(error.status || 500);
+	res.json({
+		error: {
+			message: error.message
+		}
+	});
 });
 
 // GET API INFO FROM REED
@@ -63,7 +63,7 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 	// + store in a file called 'reedJobs'
 	var info = JSON.parse(body);
 	var importantInfo = [];
-	info.results.map( job => {
+	info.results.map(job => {
 		job = {
 			title: job.jobTitle,
 			date: job.date,
@@ -72,7 +72,7 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 		importantInfo.push(job);
 	});
 
-	storeData( importantInfo, "./reedJobs");
+	storeData(importantInfo, "./reedJobs");
 
 });
 
@@ -97,9 +97,34 @@ const storeData = (data, path) => {
 };
 
 // TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-let reedJobsData = fs.readFileSync("reedJobs.json");  
-let reedJobs = JSON.parse(reedJobsData);  
-Jobs.insertMany(reedJobs[0]);
+let reedJobsData = fs.readFileSync("reedJobs.json");
+let reedJobs = JSON.parse(reedJobsData);
+
+async function deleteAllJobs() {
+	try {
+		await Jobs.deleteMany({});
+		console.log('Done!');
+		process.exit();
+	} catch (e) {
+		console.log(e);
+		process.exit();
+	}
+}
+
+
+// UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
+async function loadJobs(jobs) {
+	try {
+		await Jobs.insertMany(jobs);
+		console.log('Done!');
+		process.exit();
+	} catch (e) {
+		console.log(e);
+		process.exit();
+	}
+}
+
+loadJobs(reedJobs);
 
 // SET STATIC FOLDER
 app.use(express.static(path.join(__dirname, "public")));
