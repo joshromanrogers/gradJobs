@@ -99,6 +99,8 @@ const storeData = (data, path) => {
 // TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
 let reedJobsData = fs.readFileSync("reedJobs.json");
 let reedJobs = JSON.parse(reedJobsData);
+// loadJobs(reedJobs);
+
 
 async function deleteAllJobs() {
 	try {
@@ -110,7 +112,6 @@ async function deleteAllJobs() {
 		process.exit();
 	}
 }
-
 
 // UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
 async function loadJobs(jobs) {
@@ -124,9 +125,28 @@ async function loadJobs(jobs) {
 	}
 }
 
-loadJobs(reedJobs);
+// FIND JOBS IN MONGODB USING THE JOBS MODEL 
+async function findJob(id) {
+	try {
+		await Jobs.findById(id, (err, job) => {
+			if(err) {
+				console.log(err);
+			} else {
+				console.log(job);
+			}
+		});
+		console.log('Done!');
+		process.exit();
+	} catch (e) {
+		console.log(e);
+		process.exit();
+	}
+}
 
-// SET STATIC FOLDER
+// let jobID = '5ce3d6c499b1d9041aed7378';
+// findJob(jobID);
+
+// SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
 app.use(express.static(path.join(__dirname, "public")));
 
 const PORT = process.env.PORT || 2000;
