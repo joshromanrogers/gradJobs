@@ -14,7 +14,23 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 	useNewUrlParser: true
 });
 
-// app.use loads a function to be used as middleware
+// TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
+let reedJobsData = fs.readFileSync("reedJobs.json");
+let reedJobs = JSON.parse(reedJobsData);
+// loadJobs(reedJobs);
+
+// SPECIFY VIEW ENGINE + RENDER TO THE USER
+app.set("view engine", "ejs");
+
+// index page 
+app.get('/', (req, res) => {
+	res.render('index', { data: reedJobs });
+})
+
+// SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
+app.use(express.static(path.join(__dirname, "public")));
+
+//
 // middlewares
 app.use(morgan("dev"));
 app.use(express.json());
@@ -97,10 +113,6 @@ const storeData = (data, path) => {
 	}
 };
 
-// TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-let reedJobsData = fs.readFileSync("reedJobs.json");
-let reedJobs = JSON.parse(reedJobsData);
-// loadJobs(reedJobs);
 
 
 async function deleteAllJobs() {
@@ -164,13 +176,10 @@ async function findAllJobs() {
 	}
 }
 
-findAllJobs();
+// findAllJobs();
 // let jobID = '5ce3d6c499b1d9041aed7378';
 // findJob(jobID);
 
-// SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
-app.use(express.static(path.join(__dirname, "public")));
-app.set('view engine', 'ejs');
 
 const PORT = process.env.PORT || 2000;
 
