@@ -14,6 +14,7 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 	useNewUrlParser: true
 });
 
+// app.use loads a function to be used as middleware
 // middlewares
 app.use(morgan("dev"));
 app.use(express.json());
@@ -145,12 +146,14 @@ async function findJob(id) {
 
 // FIND ALL JOBS IN MONGODB USING THE JOBS MODEL 
 async function findAllJobs() {
+	let resultArray = [];
 	try {
-		await Jobs.find({}, (err, job) => {
+		await Jobs.find({}, (err, jobs) => {
 			if(err) {
 				console.log(err);
 			} else {
-				console.log(job);
+				console.log('found all jobs');
+				resultArray.push(jobs);
 			}
 		});
 		console.log('Done!');
@@ -167,6 +170,7 @@ findAllJobs();
 
 // SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
 app.use(express.static(path.join(__dirname, "public")));
+app.set('view engine', 'ejs');
 
 const PORT = process.env.PORT || 2000;
 

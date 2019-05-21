@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^2.6.1",
     "express": "^4.17.0",
     "mongodb": "^3.2.5",
     "mongoose": "^5.5.9",
