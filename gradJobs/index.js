@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const morgan = require("morgan");
 const Jobs = require("./models/job");
+let Parser = require('rss-parser');
 
 // INIT THE APP
 const app = express();
@@ -14,10 +15,28 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 	useNewUrlParser: true
 });
 
-// TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
+// GET DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
 let reedJobsData = fs.readFileSync("reedJobs.json");
 let reedJobs = JSON.parse(reedJobsData);
 // loadJobs(reedJobs);
+
+// GET DATA FROM STACK OVERFLOW RSS + TURN INTO JS OBJECT
+let parser = new Parser();
+ 
+(async () => {
+ 
+  let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
+  console.log(feed.title);
+ 
+  feed.items.forEach(item => {
+	console.log('title: ' + item.title);
+	console.log('link: ' + item.link);
+	console.log('date: ' + item.pubDate);
+
+  });
+ 
+})();
+
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
@@ -112,8 +131,6 @@ const storeData = (data, path) => {
 		console.error(err);
 	}
 };
-
-
 
 async function deleteAllJobs() {
 	try {
