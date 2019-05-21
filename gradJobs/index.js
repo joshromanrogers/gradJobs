@@ -143,6 +143,25 @@ async function findJob(id) {
 	}
 }
 
+// FIND ALL JOBS IN MONGODB USING THE JOBS MODEL 
+async function findAllJobs() {
+	try {
+		await Jobs.find({}, (err, job) => {
+			if(err) {
+				console.log(err);
+			} else {
+				console.log(job);
+			}
+		});
+		console.log('Done!');
+		process.exit();
+	} catch (e) {
+		console.log(e);
+		process.exit();
+	}
+}
+
+findAllJobs();
 // let jobID = '5ce3d6c499b1d9041aed7378';
 // findJob(jobID);
 
