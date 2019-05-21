@@ -2,9 +2,9 @@ const express = require("express");
 var request = require("request");
 const path = require("path");
 const mongoose = require("mongoose");
-const jobs = require("./Jobs");
 const fs = require("fs");
 const morgan = require("morgan");
+const Jobs = require("./models/job");
 
 // INIT THE APP
 const app = express(); 
@@ -74,10 +74,9 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 
 	storeData( importantInfo, "./reedJobs");
 
-
-    
 });
 
+// GET API INFO FROM ADZUNA
 // let query = {'app_id': 'bf713980',
 //          'app_key': '4d5464baa4f5a7acfe792c7185752567',
 //          'content-type': 'application/json',
@@ -97,40 +96,13 @@ const storeData = (data, path) => {
 	}
 };
 
-
-
-
 // TAKE DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
 let reedJobsData = fs.readFileSync("reedJobs.json");  
 let reedJobs = JSON.parse(reedJobsData);  
-// console.log(reedJobs);
-
-
-
+Jobs.insertMany(reedJobs[0]);
 
 // SET STATIC FOLDER
 app.use(express.static(path.join(__dirname, "public")));
-
-
-// var url = "mongodb://localhost:5000";
-
-// MongoClient.connect(url, function (err, db) {
-//     if (err) throw err;
-//     var dbo = db.db("mydb");
-//     var myobj = {
-//         name: "Company Inc",
-//         address: "Highway 37"
-//     };
-//     dbo.collection("customers").insertOne(myobj, function (err, res) {
-//         if (err) throw err;
-//         console.log("1 document inserted");
-//         db.close();
-//     });
-// });
-
-
-
-
 
 const PORT = process.env.PORT || 2000;
 

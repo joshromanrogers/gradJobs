@@ -96,8 +96,8 @@ router.post("/", (req, res, next) => {
 
 	// save is provided mongoose which can be used on mongoose models,
 	// will store in the DB
-	newJob.
-	save()
+	newJob
+	.save()
 		// if a new job is created, log + respond with 201 status + JSON message
 		// and a structured response of info about the job
 		.then(result => {
