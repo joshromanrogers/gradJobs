@@ -39,26 +39,49 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 
 });
 
+var months = {
+	'Jan': '01',
+	'Feb': '02',
+	'Mar': '03',
+	'Apr': '04',
+	'May': '05',
+	'Jun': '06',
+	'Jul': '07',
+	'Aug': '08',
+	'Sep': '09',
+	'Oct': '10',
+	'Nov': '11',
+	'Dec': '12'
+}
+
 // GET DATA FROM STACK OVERFLOW RSS + TURN INTO JS OBJECT + STORE IN ./SOJobs
-// let parser = new Parser();
- 
-// (async () => {
- 
-//   let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
+let parser = new Parser();
 
-//   var importantSOInfo = [];
-// 	feed.items.map(job => {
-// 		job = {
-// 			title: job.title,
-// 			date: job.pubDate,
-// 			url: job.link
-// 		};
-// 		importantSOInfo.push(job);
-// 	});
+(async () => {
 
-// storeData(importantSOInfo, "./SOJobs");
- 
-// })();
+	let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
+
+	var importantSOInfo = [];
+	// CHANGE THE DATE FORMAT TO RETURN THE DAY AND MONTH AS DD/MM
+	feed.items.forEach(job => {
+		let jobDate = job.pubDate.substring(5, 7);
+		let jobMonth = job.pubDate.substring(8, 11);
+		jobMonth = "0" + ("JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(jobMonth) / 3 + 1);
+		job.pubDate = jobDate + "/" + jobMonth;
+	});
+	console.log
+	feed.items.map(job => {
+		job = {
+			title: job.title,
+			date: job.pubDate,
+			url: job.link
+		};
+		importantSOInfo.push(job);
+	});
+
+	storeData(importantSOInfo, "./SOJobs");
+
+})();
 
 // GET DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
 let reedJobsData = fs.readFileSync("reedJobs.json");
@@ -81,15 +104,21 @@ app.set("view engine", "ejs");
 // 3. PUSH TO ARRAY + SEND AS DATA VALUE TO INDEX.EJS TO BE DISPLAYED  :)
 
 app.get('/', (req, res) => {
-	Jobs.find({}, null, {sort: {date: -1} }, (err, jobs) => {
-		if(err) {
+	Jobs.find({}, null, {
+		sort: {
+			date: -1
+		}
+	}, (err, jobs) => {
+		if (err) {
 			console.log(err);
 		} else {
 			resultArray.push(jobs);
-			res.render('index', { data: resultArray[0] });
+			res.render('index', {
+				data: resultArray[0]
+			});
 		}
 	});
-	
+
 })
 
 // SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
@@ -172,7 +201,7 @@ async function loadJobs(jobs) {
 async function findJob(id) {
 	try {
 		await Jobs.findById(id, (err, job) => {
-			if(err) {
+			if (err) {
 				console.log(err);
 			} else {
 				console.log(job);
