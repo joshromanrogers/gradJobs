@@ -116,6 +116,24 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/tech', (req, res) => {
+	Jobs.find({ categories: "tech"}, null, {
+		sort: {
+			date: -1
+		}
+	}, (err, jobs) => {
+		if (err) {
+			console.log(err);
+		} else {
+			resultArray = [];
+			resultArray.push(jobs);
+			res.render('index', {
+				data: resultArray[0]
+			});
+		}
+	});
+})
+
 // SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
 app.use(express.static(path.join(__dirname, "public")));
 
