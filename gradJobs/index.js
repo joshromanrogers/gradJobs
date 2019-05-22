@@ -75,17 +75,18 @@ let combinedJobs = reedJobs.concat(SOJobs);
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
 
-// WHEN USER GOES TO HOME PAGE, 'FIND' ALL DOCUMENTS OF THE JOBS COLLECTION,
-// PUSH IT TO AN ARRAY AND SEND THAT ARRAY AS 'DATA' TO THE FILE INDEX.EJS
-// TO BE DISPLAYED TO THE USER :)
+// WHEN USER GOES TO HOME PAGE:
+// 1. 'FIND' ALL DOCUMENTS OF THE JOBS COLLECTION
+// 2. SORT BY DATE
+// 3. PUSH TO ARRAY + SEND AS DATA VALUE TO INDEX.EJS TO BE DISPLAYED  :)
+
 app.get('/', (req, res) => {
-	Jobs.find({}, (err, jobs) => {
+	Jobs.find({}, null, {sort: {date: -1} }, (err, jobs) => {
 		if(err) {
 			console.log(err);
 		} else {
 			resultArray.push(jobs);
 			res.render('index', { data: resultArray[0] });
-
 		}
 	});
 	
