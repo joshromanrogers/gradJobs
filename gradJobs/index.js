@@ -15,35 +15,80 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 	useNewUrlParser: true
 });
 
+// GET DATA FROM REED API + TURN INTO JS OBJECT + STORE IN ./reedJobs
+request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
+	"auth": {
+		"user": "417100be-8a8c-46f8-8663-ef89647a035e",
+		"pass": "",
+	}
+}, (err, res, body) => {
+	// parse JSON, for each result, build an object with the relevant info
+	// + store in a file called 'reedJobs'
+	var info = JSON.parse(body);
+	var importantInfo = [];
+	info.results.map(job => {
+		job = {
+			title: job.jobTitle,
+			date: job.date,
+			url: job.jobUrl
+		};
+		importantInfo.push(job);
+	});
+
+	storeData(importantInfo, "./reedJobs");
+
+});
+
+// GET DATA FROM STACK OVERFLOW RSS + TURN INTO JS OBJECT + STORE IN ./SOJobs
+// let parser = new Parser();
+ 
+// (async () => {
+ 
+//   let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
+
+//   var importantSOInfo = [];
+// 	feed.items.map(job => {
+// 		job = {
+// 			title: job.title,
+// 			date: job.pubDate,
+// 			url: job.link
+// 		};
+// 		importantSOInfo.push(job);
+// 	});
+
+// storeData(importantSOInfo, "./SOJobs");
+ 
+// })();
+
 // GET DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
 let reedJobsData = fs.readFileSync("reedJobs.json");
 let reedJobs = JSON.parse(reedJobsData);
-// loadJobs(reedJobs);
 
-// GET DATA FROM STACK OVERFLOW RSS + TURN INTO JS OBJECT
-let parser = new Parser();
- 
-(async () => {
- 
-  let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
-  console.log(feed.title);
- 
-  feed.items.forEach(item => {
-	console.log('title: ' + item.title);
-	console.log('link: ' + item.link);
-	console.log('date: ' + item.pubDate);
+// GET DATA FROM SOJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
+let SOJobsData = fs.readFileSync("SOJobs");
+let SOJobs = JSON.parse(SOJobsData);
 
-  });
- 
-})();
-
+// MERGE ARRAYS + PUSH TO MONGODB
+let combinedJobs = reedJobs.concat(SOJobs);
+// loadJobs(combinedJobs);
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
 
-// index page 
+// WHEN USER GOES TO HOME PAGE, 'FIND' ALL DOCUMENTS OF THE JOBS COLLECTION,
+// PUSH IT TO AN ARRAY AND SEND THAT ARRAY AS 'DATA' TO THE FILE INDEX.EJS
+// TO BE DISPLAYED TO THE USER :)
 app.get('/', (req, res) => {
-	res.render('index', { data: reedJobs });
+	Jobs.find({}, (err, jobs) => {
+		if(err) {
+			console.log(err);
+		} else {
+			resultArray.push(jobs);
+			res.render('index', { data: resultArray[0] });
+
+		}
+	});
+	
 })
 
 // SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
@@ -88,41 +133,6 @@ app.use((error, req, res, next) => {
 	});
 });
 
-// GET API INFO FROM REED
-request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
-	"auth": {
-		"user": "417100be-8a8c-46f8-8663-ef89647a035e",
-		"pass": "",
-	}
-}, (err, res, body) => {
-	// parse JSON, for each result, build an object with the relevant info
-	// + store in a file called 'reedJobs'
-	var info = JSON.parse(body);
-	var importantInfo = [];
-	info.results.map(job => {
-		job = {
-			title: job.jobTitle,
-			date: job.date,
-			url: job.jobUrl
-		};
-		importantInfo.push(job);
-	});
-
-	storeData(importantInfo, "./reedJobs");
-
-});
-
-// GET API INFO FROM ADZUNA
-// let query = {'app_id': 'bf713980',
-//          'app_key': '4d5464baa4f5a7acfe792c7185752567',
-//          'content-type': 'application/json',
-//          'results_per_page': '50',
-//          'what': 'entry level'}
-// request.get("http://api.adzuna.com/v1/api/jobs/gb/search/1", {query},
-//  (err, res, body) => {
-//     console.log(body);
-// });
-
 // function that takes parsed JSON + writes it to specified path
 const storeData = (data, path) => {
 	try {
@@ -142,6 +152,8 @@ async function deleteAllJobs() {
 		process.exit();
 	}
 }
+
+// deleteAllJobs();
 
 // UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
 async function loadJobs(jobs) {
@@ -172,26 +184,7 @@ async function findJob(id) {
 		process.exit();
 	}
 }
-
-// FIND ALL JOBS IN MONGODB USING THE JOBS MODEL 
-async function findAllJobs() {
-	let resultArray = [];
-	try {
-		await Jobs.find({}, (err, jobs) => {
-			if(err) {
-				console.log(err);
-			} else {
-				console.log('found all jobs');
-				resultArray.push(jobs);
-			}
-		});
-		console.log('Done!');
-		process.exit();
-	} catch (e) {
-		console.log(e);
-		process.exit();
-	}
-}
+let resultArray = [];
 
 // findAllJobs();
 // let jobID = '5ce3d6c499b1d9041aed7378';
@@ -201,3 +194,15 @@ async function findAllJobs() {
 const PORT = process.env.PORT || 2000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+
+// GET API INFO FROM ADZUNA
+// let query = {'app_id': 'bf713980',
+//          'app_key': '4d5464baa4f5a7acfe792c7185752567',
+//          'content-type': 'application/json',
+//          'results_per_page': '50',
+//          'what': 'entry level'}
+// request.get("http://api.adzuna.com/v1/api/jobs/gb/search/1", {query},
+//  (err, res, body) => {
+//     console.log(body);
+// });
