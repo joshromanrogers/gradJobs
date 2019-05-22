@@ -7,6 +7,7 @@ const jobSchema = new Schema({
 	title: { type: String, required: true },
 	date: { type: String, required: true },
 	url: { type: String, required: true },
+	categories: { type: Array, required: false}
 });
 
 // takes 2 arguments:

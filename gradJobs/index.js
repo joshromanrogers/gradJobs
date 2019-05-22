@@ -26,6 +26,14 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 	// + store in a file called 'reedJobs'
 	var info = JSON.parse(body);
 	var importantInfo = [];
+	if(info.results[0].jobTitle.toLowerCase().includes("engineer")) {
+	}
+
+	// CHANGE THE DATE FORMAT TO RETURN THE DAY AND MONTH AS DD/MM
+	info.results.forEach(job => {
+		job.date = job.date.substring(0, 5);
+		// if(job.jobTitle.toLowerCase().includes("engineer"))
+	});
 	info.results.map(job => {
 		job = {
 			title: job.jobTitle,
@@ -38,21 +46,6 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 	storeData(importantInfo, "./reedJobs");
 
 });
-
-var months = {
-	'Jan': '01',
-	'Feb': '02',
-	'Mar': '03',
-	'Apr': '04',
-	'May': '05',
-	'Jun': '06',
-	'Jul': '07',
-	'Aug': '08',
-	'Sep': '09',
-	'Oct': '10',
-	'Nov': '11',
-	'Dec': '12'
-}
 
 // GET DATA FROM STACK OVERFLOW RSS + TURN INTO JS OBJECT + STORE IN ./SOJobs
 let parser = new Parser();
@@ -68,13 +61,14 @@ let parser = new Parser();
 		let jobMonth = job.pubDate.substring(8, 11);
 		jobMonth = "0" + ("JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(jobMonth) / 3 + 1);
 		job.pubDate = jobDate + "/" + jobMonth;
+		job.categories.push('tech');
 	});
-	console.log
 	feed.items.map(job => {
 		job = {
 			title: job.title,
 			date: job.pubDate,
-			url: job.link
+			url: job.link,
+			categories: job.categories,
 		};
 		importantSOInfo.push(job);
 	});
@@ -92,8 +86,9 @@ let SOJobsData = fs.readFileSync("SOJobs");
 let SOJobs = JSON.parse(SOJobsData);
 
 // MERGE ARRAYS + PUSH TO MONGODB
-let combinedJobs = reedJobs.concat(SOJobs);
-// loadJobs(combinedJobs);
+
+	let combinedJobs = reedJobs.concat(SOJobs);
+loadJobs(combinedJobs);
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
@@ -190,7 +185,6 @@ async function loadJobs(jobs) {
 	try {
 		await Jobs.insertMany(jobs);
 		console.log('Done!');
-		process.exit();
 	} catch (e) {
 		console.log(e);
 		process.exit();

@@ -21,8 +21,9 @@
 
             <% data.forEach(d => { %>
                 <tr>
-                  <td>
-                      <%= d.title %></td>
+                  <td><%= d.title %></td>
+                  <td><%= d.categories %></td>
+
                   <td><%= d.date %></td>
                   <td><a href=" <%= d.url %> ">Apply</a></td>
                 </tr>    
