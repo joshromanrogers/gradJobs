@@ -4,7 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const morgan = require("morgan");
-const Jobs = require("./models/job");
+const Job = require("./models/job");
 let Parser = require('rss-parser');
 
 // INIT THE APP
@@ -15,7 +15,11 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 	useNewUrlParser: true
 });
 
-// GET DATA FROM REED API + TURN INTO JS OBJECT + STORE IN ./reedJobs
+// 1. GET DATA FROM REED API
+// 2. CREATE CATEGORIES PROPERTY + ADD TECH TO EACH DOCUMENT
+// 2. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
+// 3. PUSH TO IMPORTANTREEDINFO ARRAY
+// 4. STORE ARRAY IN FILE 'reedJobs'
 request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
 	"auth": {
 		"user": "417100be-8a8c-46f8-8663-ef89647a035e",
@@ -26,20 +30,21 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 	// + store in a file called 'reedJobs'
 	var info = JSON.parse(body);
 	var importantInfo = [];
-	if(info.results[0].jobTitle.toLowerCase().includes("engineer")) {
-	}
-
-	// CHANGE THE DATE FORMAT TO RETURN THE DAY AND MONTH AS DD/MM
-	info.results.forEach(job => {
-		job.date = job.date.substring(0, 5);
-		// if(job.jobTitle.toLowerCase().includes("engineer"))
+	// if(info.results[0].jobTitle.toLowerCase().includes("engineer")) {
+	// }
+	
+	info.results.forEach(job => {	
+		job.categories = 'tech';
 	});
+
 	info.results.map(job => {
-		job = {
+
+		job = new Job ({
 			title: job.jobTitle,
-			date: job.date,
-			url: job.jobUrl
-		};
+			url: job.jobUrl,
+			categories: job.categories,
+		});
+		
 		importantInfo.push(job);
 	});
 
@@ -47,7 +52,11 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 
 });
 
-// GET DATA FROM STACK OVERFLOW RSS + TURN INTO JS OBJECT + STORE IN ./SOJobs
+// 1. GET DATA FROM STACK OVERFLOW RSS
+// 2. ADD TECH TO THE CATEGORIES ARRAY OF EACH DOCUMENT
+// 2. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
+// 3. PUSH TO IMPORTANTSOINFO ARRAY
+// 4. STORE ARRAY IN FILE 'SOJOBS'
 let parser = new Parser();
 
 (async () => {
@@ -55,21 +64,17 @@ let parser = new Parser();
 	let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
 
 	var importantSOInfo = [];
-	// CHANGE THE DATE FORMAT TO RETURN THE DAY AND MONTH AS DD/MM
-	feed.items.forEach(job => {
-		let jobDate = job.pubDate.substring(5, 7);
-		let jobMonth = job.pubDate.substring(8, 11);
-		jobMonth = "0" + ("JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(jobMonth) / 3 + 1);
-		job.pubDate = jobDate + "/" + jobMonth;
+	feed.items.forEach(job => {	
 		job.categories.push('tech');
 	});
 	feed.items.map(job => {
-		job = {
+
+		job = new Job ({
 			title: job.title,
-			date: job.pubDate,
 			url: job.link,
 			categories: job.categories,
-		};
+		});
+
 		importantSOInfo.push(job);
 	});
 
@@ -82,13 +87,13 @@ let reedJobsData = fs.readFileSync("reedJobs.json");
 let reedJobs = JSON.parse(reedJobsData);
 
 // GET DATA FROM SOJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-let SOJobsData = fs.readFileSync("SOJobs");
-let SOJobs = JSON.parse(SOJobsData);
+// let SOJobsData = fs.readFileSync("SOJobs");
+// let SOJobs = JSON.parse(SOJobsData);
 
 // MERGE ARRAYS + PUSH TO MONGODB
 
-	let combinedJobs = reedJobs.concat(SOJobs);
-loadJobs(combinedJobs);
+// let combinedJobs = reedJobs.concat(SOJobs);
+// loadJobs(combinedJobs);
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
@@ -99,7 +104,7 @@ app.set("view engine", "ejs");
 // 3. PUSH TO ARRAY + SEND AS DATA VALUE TO INDEX.EJS TO BE DISPLAYED  :)
 
 app.get('/', (req, res) => {
-	Jobs.find({}, null, {
+	Job.find({}, null, {
 		sort: {
 			date: -1
 		}
@@ -116,8 +121,9 @@ app.get('/', (req, res) => {
 
 })
 
+// RETURNS ALL JOBS WITH 'TECH' CATEGORY
 app.get('/tech', (req, res) => {
-	Jobs.find({ categories: "tech"}, null, {
+	Job.find({ categories: "tech"}, null, {
 		sort: {
 			date: -1
 		}
@@ -187,9 +193,9 @@ const storeData = (data, path) => {
 
 async function deleteAllJobs() {
 	try {
-		await Jobs.deleteMany({});
+		await Job.deleteMany({});
 		console.log('Done!');
-		process.exit();
+		// process.exit();
 	} catch (e) {
 		console.log(e);
 		process.exit();
@@ -201,7 +207,7 @@ async function deleteAllJobs() {
 // UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
 async function loadJobs(jobs) {
 	try {
-		await Jobs.insertMany(jobs);
+		await Job.insertMany(jobs);
 		console.log('Done!');
 	} catch (e) {
 		console.log(e);
@@ -212,7 +218,7 @@ async function loadJobs(jobs) {
 // FIND JOBS IN MONGODB USING THE JOBS MODEL 
 async function findJob(id) {
 	try {
-		await Jobs.findById(id, (err, job) => {
+		await Job.findById(id, (err, job) => {
 			if (err) {
 				console.log(err);
 			} else {
@@ -220,7 +226,7 @@ async function findJob(id) {
 			}
 		});
 		console.log('Done!');
-		process.exit();
+		// process.exit();
 	} catch (e) {
 		console.log(e);
 		process.exit();
@@ -231,6 +237,9 @@ let resultArray = [];
 // findAllJobs();
 // let jobID = '5ce3d6c499b1d9041aed7378';
 // findJob(jobID);
+
+// console.log(document.getElementsByClassName('tech'));
+
 
 
 const PORT = process.env.PORT || 2000;
