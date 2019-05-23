@@ -6,6 +6,7 @@ const fs = require("fs");
 const morgan = require("morgan");
 const Job = require("./models/job");
 let Parser = require('rss-parser');
+var Moment = require('moment');
 
 // INIT THE APP
 const app = express();
@@ -17,15 +18,15 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 
 // 1. GET DATA FROM REED API
 // 2. CREATE CATEGORIES PROPERTY + ADD TECH TO EACH DOCUMENT
-// 2. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
-// 3. PUSH TO IMPORTANTREEDINFO ARRAY
-// 4. STORE ARRAY IN FILE 'reedJobs'
+// 3. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
+// 4. INSERT ARRAY OF JOBS TO DATABASE
 request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
 	"auth": {
 		"user": "417100be-8a8c-46f8-8663-ef89647a035e",
 		"pass": "",
 	}
 }, (err, res, body) => {
+
 	// parse JSON, for each result, build an object with the relevant info
 	// + store in a file called 'reedJobs'
 	var info = JSON.parse(body);
@@ -37,26 +38,34 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 		job.categories = 'tech';
 	});
 
+	const handleError = function() {
+		console.error(err);
+		// handle your error
+	};
+
 	info.results.map(job => {
 
 		job = new Job ({
 			title: job.jobTitle,
 			url: job.jobUrl,
 			categories: job.categories,
+			created: new Moment().fromNow(),
 		});
 		
 		importantInfo.push(job);
 	});
 
-	storeData(importantInfo, "./reedJobs");
+	Job.insertMany(importantInfo, function(err) {
+		console.log(err);
+	});
 
 });
 
 // 1. GET DATA FROM STACK OVERFLOW RSS
 // 2. ADD TECH TO THE CATEGORIES ARRAY OF EACH DOCUMENT
-// 2. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
-// 3. PUSH TO IMPORTANTSOINFO ARRAY
-// 4. STORE ARRAY IN FILE 'SOJOBS'
+// 3. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
+// 4. INSERT ARRAY OF JOBS TO DATABASE
+
 let parser = new Parser();
 
 (async () => {
@@ -67,33 +76,29 @@ let parser = new Parser();
 	feed.items.forEach(job => {	
 		job.categories.push('tech');
 	});
+
+	const handleError = function() {
+		console.error(err);
+		// handle your error
+	};
+
 	feed.items.map(job => {
 
 		job = new Job ({
 			title: job.title,
 			url: job.link,
 			categories: job.categories,
+			created: new Moment().fromNow(),
 		});
 
 		importantSOInfo.push(job);
 	});
 
-	storeData(importantSOInfo, "./SOJobs");
+	Job.insertMany(importantSOInfo, function(err) {
+		console.log(err);
+	});
 
 })();
-
-// GET DATA FROM REEDJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-let reedJobsData = fs.readFileSync("reedJobs.json");
-let reedJobs = JSON.parse(reedJobsData);
-
-// GET DATA FROM SOJOBS.JSON AND PLACE INTO ARRAY REEDJOBS
-// let SOJobsData = fs.readFileSync("SOJobs");
-// let SOJobs = JSON.parse(SOJobsData);
-
-// MERGE ARRAYS + PUSH TO MONGODB
-
-// let combinedJobs = reedJobs.concat(SOJobs);
-// loadJobs(combinedJobs);
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
@@ -166,7 +171,7 @@ app.use((req, res, next) => {
 // middleware that forwards /jobs requests to api/routes/jobs file
 app.use("/jobs", require("./api/routes/jobs"));
 
-// if the request doesn't fit the abover (/jobs), below code will take care of error
+// if the request doesn't fit the above (/jobs), below code will take care of error
 app.use((req, res, next) => {
 	const error = new Error("Not Found");
 	error.status = 404;
@@ -202,7 +207,7 @@ async function deleteAllJobs() {
 	}
 }
 
-// deleteAllJobs();
+deleteAllJobs();
 
 // UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
 async function loadJobs(jobs) {
