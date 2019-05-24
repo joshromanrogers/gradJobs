@@ -15,11 +15,12 @@ const jobSchema = new Schema({
 		required: true },
 	categories: { type: Array, required: false},
 	created: { type: String, required: true},
-	// amount of seconds in 60 days
-	createdAt: { type: Date, expires: 5184000 },
 }, {
 	timestamps: true
 });
+
+// amount of seconds in 60 days
+// jobSchema.index({createdAt: 1},{expireAfterSeconds: 5184000});
 
 // takes 2 arguments:
 // 1. name of the model as you use it internally

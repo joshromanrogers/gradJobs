@@ -115,6 +115,23 @@ app.set("view engine", "ejs");
 // 3. PUSH TO ARRAY + SEND AS DATA VALUE TO INDEX.EJS TO BE DISPLAYED  :)
 
 app.get('/', (req, res) => {
+	// if user is using search bar, reg expression the query
+	// run a search for term with mongoose find function
+	// if no error, pass data to index.ejs + render :D
+	if (req.query.search) {
+		const regex = new RegExp(escapeRegExp(req.query.search));
+		Job.find({title: regex}, function(err, allJobs) {
+			if(err) {
+				console.log(err);
+			} else {
+				res.render('index', {
+					data: allJobs,
+					moment: Moment
+				});
+				return;
+			}
+		});
+	} else {
 	Job.find({}, null, {
 		sort: {
 			date: 1
@@ -129,7 +146,9 @@ app.get('/', (req, res) => {
 				moment: Moment
 			});
 		}
-	});
+	}
+	);
+};
 
 })
 
@@ -177,23 +196,23 @@ app.use((req, res, next) => {
 });
 
 // middleware that forwards /jobs requests to api/routes/jobs file
-app.use("/jobs", require("./api/routes/jobs"));
+// app.use("/jobs", require("./api/routes/jobs"));
 
 // if the request doesn't fit the above (/jobs), below code will take care of error
-app.use((req, res, next) => {
-	const error = new Error("Not Found");
-	error.status = 404;
-	next(error);
-});
+// app.use((req, res, next) => {
+// 	const error = new Error("Not Found");
+// 	error.status = 404;
+// 	next(error);
+// });
 
-app.use((error, req, res, next) => {
-	res.status(error.status || 500);
-	res.json({
-		error: {
-			message: error.message
-		}
-	});
-});
+// app.use((error, req, res, next) => {
+// 	res.status(error.status || 500);
+// 	res.json({
+// 		error: {
+// 			message: error.message
+// 		}
+// 	});
+// });
 
 // function that takes parsed JSON + writes it to specified path
 const storeData = (data, path) => {
@@ -253,6 +272,9 @@ let resultArray = [];
 
 // console.log(document.getElementsByClassName('tech'));
 
+function escapeRegExp(text) {
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
 
 
 const PORT = process.env.PORT || 2000;
