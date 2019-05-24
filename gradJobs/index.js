@@ -120,7 +120,7 @@ app.get('/', (req, res) => {
 	// if no error, pass data to index.ejs + render :D
 	if (req.query.search) {
 		const regex = new RegExp(escapeRegExp(req.query.search));
-		Job.find({title: regex}, function(err, allJobs) {
+		Job.find({$or:[{title: regex}, {categories: regex}]}, function(err, allJobs) {
 			if(err) {
 				console.log(err);
 			} else {
