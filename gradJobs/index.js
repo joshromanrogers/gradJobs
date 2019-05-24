@@ -146,7 +146,8 @@ app.get('/tech', (req, res) => {
 			resultArray = [];
 			resultArray.push(jobs);
 			res.render('index', {
-				data: resultArray[0]
+				data: resultArray[0],
+				moment: Moment
 			});
 		}
 	});
