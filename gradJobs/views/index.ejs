@@ -27,7 +27,7 @@
                   <td><%= d.title %></td>
                   <td><%= d.categories %></td>
 
-                  <td><%= d.created %></td>
+                  <td><%= moment(d.createdAt).fromNow(true) %></td>
                   <td><a href=" <%= d.url %> ">Apply</a></td>
                 </tr>    
                <% }); %>

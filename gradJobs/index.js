@@ -38,6 +38,9 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 		job.categories = 'tech';
 	});
 
+	let time = Date.now();
+	let timeNotChanging = time;
+
 	const handleError = function() {
 		console.error(err);
 		// handle your error
@@ -49,7 +52,7 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 			title: job.jobTitle,
 			url: job.jobUrl,
 			categories: job.categories,
-			created: new Moment().fromNow(),
+			created: new Moment(job.created).fromNow(),
 		});
 		
 		importantInfo.push(job);
@@ -77,6 +80,9 @@ let parser = new Parser();
 		job.categories.push('tech');
 	});
 
+	let time = Date.now();
+	let timeNotChanging = time;
+
 	const handleError = function() {
 		console.error(err);
 		// handle your error
@@ -88,7 +94,7 @@ let parser = new Parser();
 			title: job.title,
 			url: job.link,
 			categories: job.categories,
-			created: new Moment().fromNow(),
+			created: new Moment(job.created).fromNow(),
 		});
 
 		importantSOInfo.push(job);
@@ -119,7 +125,8 @@ app.get('/', (req, res) => {
 		} else {
 			resultArray.push(jobs);
 			res.render('index', {
-				data: resultArray[0]
+				data: resultArray[0],
+				moment: Moment
 			});
 		}
 	});
@@ -207,7 +214,7 @@ async function deleteAllJobs() {
 	}
 }
 
-deleteAllJobs();
+// deleteAllJobs();
 
 // UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
 async function loadJobs(jobs) {
