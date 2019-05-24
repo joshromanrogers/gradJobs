@@ -15,6 +15,8 @@ const jobSchema = new Schema({
 		required: true },
 	categories: { type: Array, required: false},
 	created: { type: String, required: true},
+	// amount of seconds in 60 days
+	createdAt: { type: Date, expires: 5184000 },
 }, {
 	timestamps: true
 });

@@ -117,7 +117,7 @@ app.set("view engine", "ejs");
 app.get('/', (req, res) => {
 	Job.find({}, null, {
 		sort: {
-			date: -1
+			date: 1
 		}
 	}, (err, jobs) => {
 		if (err) {
@@ -137,7 +137,7 @@ app.get('/', (req, res) => {
 app.get('/tech', (req, res) => {
 	Job.find({ categories: "tech"}, null, {
 		sort: {
-			date: -1
+			date: 1
 		}
 	}, (err, jobs) => {
 		if (err) {
