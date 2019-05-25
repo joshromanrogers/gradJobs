@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const Job = require("./models/job");
 let Parser = require('rss-parser');
 var Moment = require('moment');
+// var flash = require('express-flash-messages')
 
 // INIT THE APP
 const app = express();
@@ -15,6 +16,8 @@ const app = express();
 mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
 	useNewUrlParser: true
 });
+
+// app.use(flash());
 
 // 1. GET DATA FROM REED API
 // 2. CREATE CATEGORIES PROPERTY + ADD TECH TO EACH DOCUMENT
@@ -109,69 +112,6 @@ let parser = new Parser();
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
 
-// WHEN USER GOES TO HOME PAGE:
-// 1. 'FIND' ALL DOCUMENTS OF THE JOBS COLLECTION
-// 2. SORT BY DATE
-// 3. PUSH TO ARRAY + SEND AS DATA VALUE TO INDEX.EJS TO BE DISPLAYED  :)
-
-app.get('/', (req, res) => {
-	// if user is using search bar, reg expression the query
-	// run a search for term with mongoose find function
-	// if no error, pass data to index.ejs + render :D
-	if (req.query.search) {
-		const regex = new RegExp(escapeRegExp(req.query.search));
-		Job.find({$or:[{title: regex}, {categories: regex}]}, function(err, allJobs) {
-			if(err) {
-				console.log(err);
-			} else {
-				res.render('index', {
-					data: allJobs,
-					moment: Moment
-				});
-				return;
-			}
-		});
-	} else {
-	Job.find({}, null, {
-		sort: {
-			date: 1
-		}
-	}, (err, jobs) => {
-		if (err) {
-			console.log(err);
-		} else {
-			resultArray.push(jobs);
-			res.render('index', {
-				data: resultArray[0],
-				moment: Moment
-			});
-		}
-	}
-	);
-};
-
-})
-
-// RETURNS ALL JOBS WITH 'TECH' CATEGORY
-app.get('/tech', (req, res) => {
-	Job.find({ categories: "tech"}, null, {
-		sort: {
-			date: 1
-		}
-	}, (err, jobs) => {
-		if (err) {
-			console.log(err);
-		} else {
-			resultArray = [];
-			resultArray.push(jobs);
-			res.render('index', {
-				data: resultArray[0],
-				moment: Moment
-			});
-		}
-	});
-})
-
 // SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -196,23 +136,23 @@ app.use((req, res, next) => {
 });
 
 // middleware that forwards /jobs requests to api/routes/jobs file
-// app.use("/jobs", require("./api/routes/jobs"));
+app.use("/jobs", require("./api/routes/jobs"));
 
 // if the request doesn't fit the above (/jobs), below code will take care of error
-// app.use((req, res, next) => {
-// 	const error = new Error("Not Found");
-// 	error.status = 404;
-// 	next(error);
-// });
+app.use((req, res, next) => {
+	const error = new Error("Not Found");
+	error.status = 404;
+	next(error);
+});
 
-// app.use((error, req, res, next) => {
-// 	res.status(error.status || 500);
-// 	res.json({
-// 		error: {
-// 			message: error.message
-// 		}
-// 	});
-// });
+app.use((error, req, res, next) => {
+	res.status(error.status || 500);
+	res.json({
+		error: {
+			message: error.message
+		}
+	});
+});
 
 // function that takes parsed JSON + writes it to specified path
 const storeData = (data, path) => {
@@ -264,7 +204,6 @@ async function findJob(id) {
 		process.exit();
 	}
 }
-let resultArray = [];
 
 // findAllJobs();
 // let jobID = '5ce3d6c499b1d9041aed7378';
@@ -272,9 +211,6 @@ let resultArray = [];
 
 // console.log(document.getElementsByClassName('tech'));
 
-function escapeRegExp(text) {
-	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-  }
 
 
 const PORT = process.env.PORT || 2000;
