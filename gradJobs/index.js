@@ -36,34 +36,59 @@ request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=L
 	var importantInfo = [];
 	// if(info.results[0].jobTitle.toLowerCase().includes("engineer")) {
 	// }
-	
-	info.results.forEach(job => {	
+
+	info.results.forEach(job => {
 		job.categories = 'tech';
 	});
 
 	let time = Date.now();
 	let timeNotChanging = time;
 
-	const handleError = function() {
+	const handleError = function () {
 		console.error(err);
 		// handle your error
 	};
 
 	info.results.map(job => {
 
-		job = new Job ({
+		job = new Job({
 			title: job.jobTitle,
 			url: job.jobUrl,
 			categories: job.categories,
 			created: new Moment(job.created).fromNow(),
 		});
-		
+
 		importantInfo.push(job);
 	});
 
-	Job.insertMany(importantInfo, function(err) {
-		console.log(err);
-	});
+	// Job.insertMany(importantInfo, function (err) {
+	// 	console.log(err);
+	// });
+
+	importantInfo.forEach((job) => {
+	   let query = {};
+	   let update = {
+		   title: job.jobTitle,
+		   url: job.jobUrl,
+		   categories: job.categories,
+		   created: new Moment(job.created).fromNow(),
+	   };
+	   let options = {
+		   upsert: true,
+		   new: true,
+		   setDefaultsOnInsert: false,
+	   };
+	   Job.findOneAndUpdate(query, update, options)
+	   .then((done) => {
+		   console.log('inserted' + done);
+	   });
+   })
+
+	// Job.updateMany(importantInfo, {
+	// 	$setOnInsert: importantInfo
+	// }, {
+	// 	upsert: true
+	// });
 
 });
 
@@ -79,21 +104,21 @@ let parser = new Parser();
 	let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
 
 	var importantSOInfo = [];
-	feed.items.forEach(job => {	
+	feed.items.forEach(job => {
 		job.categories.push('tech');
 	});
 
 	let time = Date.now();
 	let timeNotChanging = time;
 
-	const handleError = function() {
+	const handleError = function () {
 		console.error(err);
 		// handle your error
 	};
 
 	feed.items.map(job => {
 
-		job = new Job ({
+		job = new Job({
 			title: job.title,
 			url: job.link,
 			categories: job.categories,
@@ -103,9 +128,33 @@ let parser = new Parser();
 		importantSOInfo.push(job);
 	});
 
-	Job.insertMany(importantSOInfo, function(err) {
-		console.log(err);
-	});
+	// Job.insertMany(importantSOInfo, function (err) {
+	// 	console.log(err);
+	// });
+
+	 importantSOInfo.forEach((job) => {
+		 console.log(job);
+		let query = {};
+		let update = {
+			title: job.title,
+			url: job.url,
+			categories: job.categories,
+			created: new Moment(job.created).fromNow(),
+		};
+		let options = {
+			upsert: true,
+			new: true,
+			setDefaultsOnInsert: false,
+		};
+		Job.findOneAndUpdate(query, update, options)
+		.then((done) => {
+			console.log('inserted' + done);
+		});
+	})
+
+	
+
+	// Job.update({}, importantSOInfo, {upsert: true});
 
 })();
 
@@ -205,26 +254,38 @@ async function findJob(id) {
 	}
 }
 
-// findAllJobs();
-// let jobID = '5ce3d6c499b1d9041aed7378';
-// findJob(jobID);
+let jsdom = require('jsdom').JSDOM,
 
-// console.log(document.getElementsByClassName('tech'));
+	// the file I will be loading
+	uri = 'views/index.ejs',
 
+	// the options that I will be giving to jsdom
+	options = {
+		runScripts: 'dangerously',
+		resources: "usable"
+	};
 
+// load from an external file
+jsdom.fromFile(uri, options).then(function (dom) {
+
+	let window = dom.window;
+	let document = window.document;
+
+	let header = document.getElementsByTagName('H1');
+	console.log(header);
+	// header.style.color = "red";
+
+	let title = document.querySelectorAll('TH');
+	// title[0].style.backgroundColor = "red";
+	for (i = 0; i < title.length; i++) {
+		title[i].style.backgroundColor = "red";
+	}
+}).catch(function (e) {
+
+	console.log(e);
+
+});
 
 const PORT = process.env.PORT || 2000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
-
-// GET API INFO FROM ADZUNA
-// let query = {'app_id': 'bf713980',
-//          'app_key': '4d5464baa4f5a7acfe792c7185752567',
-//          'content-type': 'application/json',
-//          'results_per_page': '50',
-//          'what': 'entry level'}
-// request.get("http://api.adzuna.com/v1/api/jobs/gb/search/1", {query},
-//  (err, res, body) => {
-//     console.log(body);
-// });

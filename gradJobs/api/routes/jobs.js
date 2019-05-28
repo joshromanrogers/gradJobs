@@ -72,6 +72,10 @@ router.get("/", (req, res) => {
 
 });
 
+router.get("/postJob", (req, res) => {
+	res.render("postJob", {});
+});
+
 // RETURNS ALL JOBS WITH 'TECH' CATEGORY
 router.get("/tech", (req, res) => {
 	Job.find({

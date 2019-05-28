@@ -13,6 +13,7 @@
     "ejs": "^2.6.1",
     "express": "^4.17.0",
     "express-flash-messages": "^0.1.1",
+    "jsdom": "^15.1.0",
     "moment": "^2.24.0",
     "mongodb": "^3.2.5",
     "mongoose": "^5.5.11",

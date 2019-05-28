@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-require('mongoose-moment')(mongoose);
+let Parser = require("rss-parser");
+var request = require("request");
+require("mongoose-moment")(mongoose);
 // to get rid of deprecation warning
-mongoose.set('useCreateIndex', true);
+mongoose.set("useCreateIndex", true);
 
 // DEFINE THE JOB SCHEMA
 const jobSchema = new Schema({
@@ -24,4 +26,17 @@ const jobSchema = new Schema({
 
 // takes 2 arguments:
 // 1. name of the model as you use it internally
+
+// GET API INFO FROM ADZUNA
+// let query = {'app_id': 'bf713980',
+//          'app_key': '4d5464baa4f5a7acfe792c7185752567',
+//          'content-type': 'application/json',
+//          'results_per_page': '50',
+//          'what': 'entry level'}
+// request.get("http://api.adzuna.com/v1/api/jobs/gb/search/1", {query},
+//  (err, res, body) => {
+//     console.log(body);
+// });
+
+
 module.exports = mongoose.model("Jobs", jobSchema);
