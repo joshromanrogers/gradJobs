@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const morgan = require("morgan");
 const Job = require("./models/job");
-let Parser = require('rss-parser');
-var Moment = require('moment');
+const SOCall = require("./models/SOCall");
+const ReedCall = require("./models/ReedCall");
 // var flash = require('express-flash-messages')
 
 // INIT THE APP
@@ -19,144 +19,18 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 
 // app.use(flash());
 
-// 1. GET DATA FROM REED API
-// 2. CREATE CATEGORIES PROPERTY + ADD TECH TO EACH DOCUMENT
-// 3. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
-// 4. INSERT ARRAY OF JOBS TO DATABASE
-request.get(" https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London", {
-	"auth": {
-		"user": "417100be-8a8c-46f8-8663-ef89647a035e",
-		"pass": "",
-	}
-}, (err, res, body) => {
 
-	// parse JSON, for each result, build an object with the relevant info
-	// + store in a file called 'reedJobs'
-	var info = JSON.parse(body);
-	var importantInfo = [];
-	// if(info.results[0].jobTitle.toLowerCase().includes("engineer")) {
-	// }
 
-	info.results.forEach(job => {
-		job.categories = 'tech';
+SOCall()
+	.catch(e => {
+		return e
 	});
 
-	let time = Date.now();
-	let timeNotChanging = time;
-
-	const handleError = function () {
-		console.error(err);
-		// handle your error
-	};
-
-	info.results.map(job => {
-
-		job = new Job({
-			title: job.jobTitle,
-			url: job.jobUrl,
-			categories: job.categories,
-			created: new Moment(job.created).fromNow(),
-		});
-
-		importantInfo.push(job);
+ReedCall()
+	.catch(e => {
+		return e
 	});
 
-	// Job.insertMany(importantInfo, function (err) {
-	// 	console.log(err);
-	// });
-
-	importantInfo.forEach((job) => {
-	   let query = {};
-	   let update = {
-		   title: job.jobTitle,
-		   url: job.jobUrl,
-		   categories: job.categories,
-		   created: new Moment(job.created).fromNow(),
-	   };
-	   let options = {
-		   upsert: true,
-		   new: true,
-		   setDefaultsOnInsert: false,
-	   };
-	   Job.findOneAndUpdate(query, update, options)
-	   .then((done) => {
-		   console.log('inserted' + done);
-	   });
-   })
-
-	// Job.updateMany(importantInfo, {
-	// 	$setOnInsert: importantInfo
-	// }, {
-	// 	upsert: true
-	// });
-
-});
-
-// 1. GET DATA FROM STACK OVERFLOW RSS
-// 2. ADD TECH TO THE CATEGORIES ARRAY OF EACH DOCUMENT
-// 3. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
-// 4. INSERT ARRAY OF JOBS TO DATABASE
-
-let parser = new Parser();
-
-(async () => {
-
-	let feed = await parser.parseURL('https://stackoverflow.com/jobs/feed?location=london&q=graduate');
-
-	var importantSOInfo = [];
-	feed.items.forEach(job => {
-		job.categories.push('tech');
-	});
-
-	let time = Date.now();
-	let timeNotChanging = time;
-
-	const handleError = function () {
-		console.error(err);
-		// handle your error
-	};
-
-	feed.items.map(job => {
-
-		job = new Job({
-			title: job.title,
-			url: job.link,
-			categories: job.categories,
-			created: new Moment(job.created).fromNow(),
-		});
-
-		importantSOInfo.push(job);
-	});
-
-	// Job.insertMany(importantSOInfo, function (err) {
-	// 	console.log(err);
-	// });
-
-	 importantSOInfo.forEach((job) => {
-		 console.log(job);
-		let query = {};
-		let update = {
-			title: job.title,
-			url: job.url,
-			categories: job.categories,
-			created: new Moment(job.created).fromNow(),
-		};
-		let options = {
-			upsert: true,
-			new: true,
-			setDefaultsOnInsert: false,
-		};
-		Job.findOneAndUpdate(query, update, options)
-		.then((done) => {
-			console.log('inserted' + done);
-		});
-	})
-
-	
-
-	// Job.update({}, importantSOInfo, {upsert: true});
-
-})();
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
