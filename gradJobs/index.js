@@ -19,17 +19,16 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 
 // app.use(flash());
 
-
-
-SOCall()
+// FUNCTIONS THAT COMPLETE API + RSS CALLS
+setInterval(() => SOCall()
 	.catch(e => {
 		return e
-	});
+	}), 10000);
 
-ReedCall()
+setInterval(() => ReedCall()
 	.catch(e => {
 		return e
-	});
+	}), 10000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
@@ -147,7 +146,7 @@ jsdom.fromFile(uri, options).then(function (dom) {
 
 	let header = document.getElementsByTagName('H1');
 	console.log(header);
-	// header.style.color = "red";
+	header.style.color = "red";
 
 	let title = document.querySelectorAll('TH');
 	// title[0].style.backgroundColor = "red";
