@@ -1,0 +1,9 @@
+{
+    "adverts": [
+        {
+            "id": "1",
+            "name": "Standard Job Post",
+            "price": 8900
+        }
+    ]
+}
