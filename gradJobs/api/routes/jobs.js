@@ -136,7 +136,7 @@ router.get("/postJob", (req, res) => {
 
 // RETURNS ALL JOBS WITH 'TECH' CATEGORY
 // data in resultArray[0] is apssed to index.ejs
-router.get("/jobs/tech", (req, res) => {
+router.get("/tech", (req, res) => {
 	Job.find({
 		categories: "tech"
 	}, null, {
