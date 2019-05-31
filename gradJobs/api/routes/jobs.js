@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-// local db of jobs
-const jobs = require("../../Jobs");
 // schema of what a job must look like
 const Job = require("../../models/job");
 // connecting to db

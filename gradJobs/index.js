@@ -1,3 +1,10 @@
+// check to see if we are working in development of production environment
+if(process.env.NODE_ENV !== 'production') {
+	// if we are in development, load env file
+	require('dotenv').config();
+}
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const express = require("express");
 var request = require("request");
 const path = require("path");
@@ -10,6 +17,7 @@ const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
 // var flash = require('express-flash-messages')
 
+console.log(stripeSecretKey);
 // INIT THE APP
 const app = express();
 
