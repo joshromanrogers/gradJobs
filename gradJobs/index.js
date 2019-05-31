@@ -4,7 +4,6 @@ if(process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 }
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const express = require("express");
 var request = require("request");
 const path = require("path");
@@ -15,9 +14,13 @@ const Job = require("./models/job");
 const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
-// var flash = require('express-flash-messages')
 
-console.log(stripeSecretKey);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
+
+
+
+console.log(stripeSecretKey, stripePublicKey);
 // INIT THE APP
 const app = express();
 
