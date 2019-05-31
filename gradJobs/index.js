@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const Job = require("./models/job");
 const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
+const bodyParser = require("body-parser");
 // var flash = require('express-flash-messages')
 
 // INIT THE APP
@@ -20,15 +21,15 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 // app.use(flash());
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
-setInterval(() => SOCall()
-	.catch(e => {
-		return e
-	}), 10000);
+// setInterval(() => SOCall()
+// 	.catch(e => {
+// 		return e
+// 	}), 10000);
 
-setInterval(() => ReedCall()
-	.catch(e => {
-		return e
-	}), 10000);
+// setInterval(() => ReedCall()
+// 	.catch(e => {
+// 		return e
+// 	}), 10000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
@@ -56,6 +57,11 @@ app.use((req, res, next) => {
 	// so other routes can take over when it's done implementing headers
 	next();
 });
+
+
+app.use(bodyParser.urlencoded({
+	extended: true
+  }));
 
 // middleware that forwards /jobs requests to api/routes/jobs file
 app.use("/jobs", require("./api/routes/jobs"));

@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 var Moment = require("moment");
 const reg = require("../../util/regex");
 
+
 // -1. (GET) HOMEPAGE - SEARCHBAR OR ALL JOBS
 // 0. (GET) GET ALL JOBS WITH CATEGORY 'TECH'
 // 1. (GET) GET ALL JOBS
@@ -71,6 +72,70 @@ router.get("/", (req, res) => {
 	}
 
 });
+
+// CREATE A NEW JOB
+router.post("/postJob", (req, res, next) => {
+		// create new job using the Job model that's imported from models.js
+	const newJob = new Job({
+		_id: new mongoose.Types.ObjectId(),
+		title: req.body.title,
+		url: req.body.url,
+		categories: req.body.categories,
+		created: new Moment().fromNow(),
+	});
+
+	console.log(newJob);
+
+	// save is provided by mongoose which can be used on mongoose models,
+	// will store in the DB
+	newJob
+		.save()
+		// if a new job is created, log + respond with 201 status + JSON message
+		// and a structured response of info about the job
+		.then(result => {
+			console.log(result);
+			res.status(201).json({
+				message: "Handling POST request to /jobs",
+				createdJob: {
+					_id: result._id,
+					title: result.title,
+					date: result.date,
+					url: result.url,
+
+					request: {
+						type: "POST",
+						url: "http://localhost:2000/jobs/" + result._id
+					}
+				}
+			});
+		})
+		// if job creation fails...
+		.catch(err => {
+			console.log(err);
+			console.log('failed');
+			res.status(500).json({
+				error: err
+			});
+		});
+
+
+});
+
+// router.post('/postJob', function (req, res) {
+// 	console.log(req.body);
+// 	// try {
+// 	// 	job = new Job({
+//     //         title: job.jobTitle,
+//     //         url: job.jobUrl,
+//     //         categories: job.categories,
+//     //         created: new Moment(job.created).fromNow(),
+//     //     });
+// 	// 	console.log(req.body);
+// 	// 	// await Job.insertOne(req.body);
+// 	// } catch (err) {
+// 	// 	console.error(err);
+// 	// }
+// });
 
 router.get("/postJob", (req, res) => {
 	res.render("postJob", {});
@@ -179,7 +244,7 @@ router.get("/tech", (req, res) => {
 // 		url: req.body.url
 // 	});
 
-// 	// save is provided mongoose which can be used on mongoose models,
+// 	// save is provided by mongoose which can be used on mongoose models,
 // 	// will store in the DB
 // 	newJob
 // 		.save()
