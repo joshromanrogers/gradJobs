@@ -30,11 +30,6 @@ router.get("/", (req, res) => {
 	if (req.query.search) {
 		const regex = new RegExp(reg.escapeRegExp(req.query.search));
 		Job.find({
-			$or: [{
-				title: regex
-			}, {
-				categories: regex
-			}]
 		}, function (err, allJobs) {
 			if (err) {
 				console.log(err);
@@ -83,8 +78,6 @@ router.post("/postJob", (req, res, next) => {
 		categories: req.body.categories,
 		created: new Moment().fromNow(),
 	});
-
-	console.log(newJob);
 
 	// save is provided by mongoose which can be used on mongoose models,
 	// will store in the DB
@@ -142,7 +135,8 @@ router.get("/postJob", (req, res) => {
 });
 
 // RETURNS ALL JOBS WITH 'TECH' CATEGORY
-router.get("/tech", (req, res) => {
+// data in resultArray[0] is apssed to index.ejs
+router.get("/jobs/tech", (req, res) => {
 	Job.find({
 		categories: "tech"
 	}, null, {

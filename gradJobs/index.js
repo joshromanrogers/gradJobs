@@ -21,15 +21,15 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 // app.use(flash());
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
-// setInterval(() => SOCall()
-// 	.catch(e => {
-// 		return e
-// 	}), 10000);
+setInterval(() => SOCall()
+	.catch(e => {
+		return e
+	}), 10000);
 
-// setInterval(() => ReedCall()
-// 	.catch(e => {
-// 		return e
-// 	}), 10000);
+setInterval(() => ReedCall()
+	.catch(e => {
+		return e
+	}), 10000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
