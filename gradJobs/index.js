@@ -1,5 +1,5 @@
 // check to see if we are working in development of production environment
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
 	// if we are in development, load env file
 	require('dotenv').config();
 }
@@ -18,9 +18,8 @@ const bodyParser = require("body-parser");
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
 
+const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 
-
-console.log(stripeSecretKey, stripePublicKey);
 // INIT THE APP
 const app = express();
 
@@ -28,6 +27,15 @@ const app = express();
 mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
 	useNewUrlParser: true
 });
+
+(async () => {
+	const charge = await stripe.charges.create({
+		amount: 999,
+		currency: 'usd',
+		source: 'tok_visa',
+		receipt_email: 'jenny.rosen@example.com',
+	});
+})();
 
 // app.use(flash());
 
@@ -72,7 +80,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.urlencoded({
 	extended: true
-  }));
+}));
 
 // middleware that forwards /jobs requests to api/routes/jobs file
 app.use("/jobs", require("./api/routes/jobs"));
@@ -144,37 +152,59 @@ async function findJob(id) {
 	}
 }
 
-let jsdom = require('jsdom').JSDOM,
+// let jsdom = require('jsdom').JSDOM,
 
-	// the file I will be loading
-	uri = 'views/index.ejs',
+// 	// the file I will be loading
+// 	uri = 'views/index.ejs',
 
-	// the options that I will be giving to jsdom
-	options = {
-		runScripts: 'dangerously',
-		resources: "usable"
-	};
+// 	// the options that I will be giving to jsdom
+// 	options = {
+// 		runScripts: 'dangerously',
+// 		resources: "usable"
+// 	};
+
 
 // load from an external file
-jsdom.fromFile(uri, options).then(function (dom) {
+// jsdom.fromFile(uri, options).then(function (dom) {
 
-	let window = dom.window;
-	let document = window.document;
+// 	let window = dom.window;
+// 	let document = window.document;
 
-	let header = document.getElementsByTagName('H1');
-	console.log(header);
-	header.style.color = "red";
+// 	let header = document.getElementsByTagName('H1');
+// 	console.log(header);
+// 	header.style.color = "red";
 
-	let title = document.querySelectorAll('TH');
-	// title[0].style.backgroundColor = "red";
-	for (i = 0; i < title.length; i++) {
-		title[i].style.backgroundColor = "red";
-	}
-}).catch(function (e) {
+// 	let title = document.querySelectorAll('TH');
+// 	// title[0].style.backgroundColor = "red";
+// 	for (i = 0; i < title.length; i++) {
+// 		title[i].style.backgroundColor = "red";
+// 	}
+// }).catch(function (e) {
 
-	console.log(e);
+// 	console.log(e);
 
-});
+// });
+
+// let jobSubmit = document.getElementById("jobSubmit");
+// console.log(jobSubmit);
+
+// function purchaseClicked() {
+// 	// open stripe pop up box
+// 	const price = 8900;
+// 	stripeHandler.open({
+// 		amount: price
+// 	})
+// }
+
+// var stripeHandler = StripeCheckout.configure({
+// 	key: stripePublicKey,
+// 	locale: 'auto',
+// 	// once everything has been confirmed, stripe was send back + call
+// 	// the below method for us
+// 	token: function (token) {
+
+// 	}
+// })
 
 const PORT = process.env.PORT || 2000;
 

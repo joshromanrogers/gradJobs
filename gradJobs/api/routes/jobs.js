@@ -1,5 +1,12 @@
+// check to see if we are working in development of production environment
+if(process.env.NODE_ENV !== 'production') {
+	// if we are in development, load env file
+	require('dotenv').config();
+}
+
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 // schema of what a job must look like
 const Job = require("../../models/job");
 // connecting to db
@@ -7,14 +14,8 @@ const mongoose = require("mongoose");
 var Moment = require("moment");
 const reg = require("../../util/regex");
 
-
-// -1. (GET) HOMEPAGE - SEARCHBAR OR ALL JOBS
-// 0. (GET) GET ALL JOBS WITH CATEGORY 'TECH'
-// 1. (GET) GET ALL JOBS
-// 2. (GET) GET A SINGLE JOB
-// 3. (POST) CREATE A NEW JOB
-// 4. (PATCH) UPDATE A JOB
-// 5. (DELETE) DELETE A JOB
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
 
 // WHEN USER GOES TO HOME PAGE:
 // 1. 'FIND' ALL DOCUMENTS OF THE JOBS COLLECTION
@@ -32,12 +33,6 @@ router.get("/", (req, res) => {
 			if (err) {
 				console.log(err);
 			} else {
-
-				// 			if(allJobs.length < 1) {
-				// 				req.flash("error", "No jobs found");
-				// 				return res.redirect("back");
-				//  }
-
 				res.render("index", {
 					data: allJobs,
 					moment: Moment
@@ -65,6 +60,7 @@ router.get("/", (req, res) => {
 	}
 
 });
+
 
 // CREATE A NEW JOB
 router.post("/postJob", (req, res, next) => {
@@ -129,8 +125,20 @@ router.post("/postJob", (req, res, next) => {
 // });
 
 router.get("/postJob", (req, res) => {
-	res.render("postJob", {});
-});
+	fs.readFile("items.json", function(error, data) {
+		if (error) {
+			res.status(500).end();
+		} else {
+			// render the postJob page and pass + parse the JSON data
+			res.render("postJob", {
+				stripePublicKey: stripePublicKey,
+				items: JSON.parse(data)
+			})
+		}
+	})
+})
+
+
 
 // RETURNS ALL JOBS WITH 'TECH' CATEGORY
 // data in resultArray[0] is apssed to index.ejs
