@@ -164,27 +164,6 @@ async function findJob(id) {
 // 	};
 
 
-// load from an external file
-// jsdom.fromFile(uri, options).then(function (dom) {
-
-// 	let window = dom.window;
-// 	let document = window.document;
-
-// 	let header = document.getElementsByTagName('H1');
-// 	console.log(header);
-// 	header.style.color = "red";
-
-// 	let title = document.querySelectorAll('TH');
-// 	// title[0].style.backgroundColor = "red";
-// 	for (i = 0; i < title.length; i++) {
-// 		title[i].style.backgroundColor = "red";
-// 	}
-// }).catch(function (e) {
-
-// 	console.log(e);
-
-// });
-
 // let jobSubmit = document.getElementById("jobSubmit");
 // console.log(jobSubmit);
 
