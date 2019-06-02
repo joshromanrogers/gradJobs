@@ -14,6 +14,8 @@ const Job = require("./models/job");
 const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
+require('jsdom-global')();
+require("bootstrap.native");
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;

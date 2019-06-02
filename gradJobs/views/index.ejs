@@ -13,52 +13,59 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/style.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 </head>
 
 <body>
     <h1>GradJob</h1>
-    <a href="/jobs/postJob">Post A Job</a>
-    
+    <button class="button" href="/jobs/postJob">Post A Job</button>
+
     <form action="/jobs" method="GET">
         <div>
             <input type="text" name="search" placeholder="input here...">
             <input type="submit" value="search">
         </div>
     </form>
-    <a href="/jobs/tech" class="tech">tech</a>
+
+    <ul class="list-group list-group-horizontal">
+        <li class="list-group-item" href="/jobs/tech">First item</li>
+        <li class="list-group-item">Second item</li>
+        <li class="list-group-item">Third item</li>
+        <li class="list-group-item">Fourth item</li>
+    </ul>
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Categories</th>
+            <th>Date</th>
+            <th>URL</th>
+        </tr>
+
+        <% data.forEach(d => { %>
+        <tr>
+            <td><%= d.title %></td>
+            <td><%= d.categories %></td>
+
+            <td><%= moment(d.createdAt).fromNow(true) %></td>
+            <td><a href=" <%= d.url %> ">Apply</a></td>
+        </tr>
+        <tr>
+            <td>
+                <div><%= d.title %></div>
+                <div>
+                    <a href=" <%= d.url %> ">Apply</a>
+                </div>
+            </td>
+        </tr>
+        <% }); %>
 
 
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Categories</th>
-                <th>Date</th>
-                <th>URL</th>
-            </tr>
-
-            <% data.forEach(d => { %>
-            <tr>
-                <td><%= d.title %></td>
-                <td><%= d.categories %></td>
-
-                <td><%= moment(d.createdAt).fromNow(true) %></td>
-                <td><a href=" <%= d.url %> ">Apply</a></td>
-            </tr>
-            <tr>
-                <td>
-                    <div><%= d.title %></div>
-                    <div>
-                        <a href=" <%= d.url %> ">Apply</a>
-                    </div>
-                </td>
-            </tr>
-            <% }); %>
-
-
-        </table>
-        <script type="module" src="../index.js"></script>
-        <script type="module" src="../util/regex.js"></script>
-        <!-- <script type="text/javascript" src="../index.js"></script> -->
+    </table>
+    <script type="module" src="../index.js"></script>
+    <script type="module" src="../util/regex.js"></script>
+    <!-- <script type="text/javascript" src="../index.js"></script> -->
 
 
 </body>
@@ -66,5 +73,4 @@
 </html>
 
 <script>
-
 </script>
