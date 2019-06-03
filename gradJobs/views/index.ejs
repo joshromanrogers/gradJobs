@@ -16,41 +16,49 @@
 </head>
 
 <body>
-    <h1>GradJob</h1>
-    <button class="button" href="/jobs/postJob">Post A Job</button>
+    <h1>GradJobs</h1>
+    <a href="/jobs/postJob" class="button">Post A Job</a>
 
+    <!-- search bar -->
     <form action="/jobs" method="GET">
-        <div>
-            <input type="text" name="search" placeholder="input here...">
-            <input type="submit" value="search">
+        <div class="search">
+            <input class="searchTerm" type="text" name="search" placeholder="">
+            <button class="searchButton" type="submit" value="search">
+                <i class="fa fa-search"></i>
+            </button>
         </div>
     </form>
 
-    <ul class="">
-        <li class="">tech</li>
-        <li class="">design</li>
-        <li class="">finance</li>
-        <li class="">marketing</li>
-        <li class="">engineering</li>
+    <!-- categories -->
+    <ul class="categories-container">
+        <li class="active category"><a href="/jobs/">All</a></li>
+        <li class="category"><a href="/jobs/tech">Tech</a></li>
+        <li class="category"><a href="/jobs/design">Design</a></li>
+        <li class="category"><a href="/jobs/finance">Finance</a></li>
+        <li class="category"><a href="/jobs/marketing">Marketing</a></li>
+        <li class="category"><a href="/jobs/engineering">Engineering</a></li>
     </ul>
 
+    <!-- job table -->
     <table>
-        <tr>
-            <th>Title</th>
-            <th>Categories</th>
-            <th>Date</th>
-            <th>URL</th>
-        </tr>
+
+    <colgroup>
+       <col span="1" style="width: 50%;">
+       <col span="1" style="width: 30%;">
+       <col span="1" style="width: 10%;">
+       <col span="1" style="width: 10%;">
+
+    </colgroup>
 
         <% data.forEach(d => { %>
-        <tr>
+        <tr class="main-row">
             <td><%= d.title %></td>
             <td><%= d.categories %></td>
 
             <td><%= moment(d.createdAt).fromNow(true) %></td>
             <td><a href=" <%= d.url %> ">Apply</a></td>
         </tr>
-        <tr>
+        <tr class="description-row"">
             <td>
                 <div><%= d.title %></div>
                 <div>
@@ -62,9 +70,11 @@
 
 
     </table>
-    <script type="module" src="../index.js"></script>
-    <script type="module" src="../util/regex.js"></script>
-    <!-- <script type="text/javascript" src="../index.js"></script> -->
+    <script type=" module" src="../index.js">
+            </script>
+            <script type="text/javascript" src="../public/script.js"></script>
+            <script type="module" src="../util/regex.js"></script>
+            <!-- <script type="text/javascript" src="../index.js"></script> -->
 
 
 </body>
