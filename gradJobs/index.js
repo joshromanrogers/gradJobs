@@ -17,11 +17,6 @@ const bodyParser = require("body-parser");
 require("@fortawesome/fontawesome-free");
 require('jsdom-global')();
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
-
-const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
-
 // INIT THE APP
 const app = express();
 
@@ -30,27 +25,38 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 	useNewUrlParser: true
 });
 
+// STRIPE
+
+// Set your secret key: remember to change this to your live secret key in production
+// See your keys here: https://dashboard.stripe.com/account/apikeys
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
+console.log(stripeSecretKey, stripePublicKey);
+
+const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
+
 (async () => {
-	const charge = await stripe.charges.create({
-		amount: 999,
-		currency: 'usd',
-		source: 'tok_visa',
-		receipt_email: 'jenny.rosen@example.com',
-	});
+  const charge = await stripe.charges.create({
+    amount: 999,
+    currency: 'usd',
+    source: 'tok_visa',
+    receipt_email: 'jenny.rosen@example.com',
+  });
 })();
 
 // app.use(flash());
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
-setInterval(() => SOCall()
-	.catch(e => {
-		return e
-	}), 60000);
+// setInterval(() => SOCall()
+// 	.catch(e => {
+// 		return e
+// 	}), 10000);
 
-setInterval(() => ReedCall()
-	.catch(e => {
-		return e
-	}), 60000);
+// setInterval(() => ReedCall()
+// 	.catch(e => {
+// 		return e
+// 	}), 10000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER

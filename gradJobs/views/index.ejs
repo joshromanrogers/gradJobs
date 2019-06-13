@@ -24,7 +24,8 @@
         <div class="search">
             <input class="searchTerm" type="text" name="search" placeholder="">
             <button class="searchButton" type="submit" value="search">
-                <i class="fa fa-search"></i>
+                <%# <i class="fa fa-search"></i> %>
+                🔍
             </button>
         </div>
     </form>
@@ -52,11 +53,11 @@
 
         <% data.forEach(d => { %>
         <tr class="main-row">
-            <td><%= d.title %></td>
+            <td><b><%= d.title %></b></td>
             <td><%= d.categories %></td>
 
             <td><%= moment(d.createdAt).fromNow(true) %></td>
-            <td><a href=" <%= d.url %> ">Apply</a></td>
+            <td><a class="apply" href=" <%= d.url %> ">Apply</a></td>
         </tr>
         <tr class="description-row"">
             <td>
@@ -72,7 +73,7 @@
     </table>
     <script type=" module" src="../index.js">
             </script>
-            <script type="text/javascript" src="../public/script.js"></script>
+            <script type="text/javascript" src="/script.js"></script>
             <script type="module" src="../util/regex.js"></script>
             <!-- <script type="text/javascript" src="../index.js"></script> -->
 

@@ -30,22 +30,19 @@ module.exports = async function reedCall() {
     jsonData.results.forEach(job => {
         job.categories = 'tech';
     });
-
     jsonData.results.map(job => {
-
         job = new Job({
             title: job.jobTitle,
             url: job.jobUrl,
             categories: job.categories,
             created: new Moment(job.created).fromNow(),
         });
-
-        importantInfo.push(job);
+        job.save();
     });
 
-    Job.insertMany(importantInfo, function (err) {
-        console.log(err);
-    })
+    // Job.insertMany(importantInfo, function (err) {
+    //     console.log(err);
+    // });
 
 };
 

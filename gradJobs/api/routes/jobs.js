@@ -108,22 +108,6 @@ router.post("/postJob", (req, res, next) => {
 
 });
 
-// router.post('/postJob', function (req, res) {
-// 	console.log(req.body);
-// 	// try {
-// 	// 	job = new Job({
-//     //         title: job.jobTitle,
-//     //         url: job.jobUrl,
-//     //         categories: job.categories,
-//     //         created: new Moment(job.created).fromNow(),
-//     //     });
-// 	// 	console.log(req.body);
-// 	// 	// await Job.insertOne(req.body);
-// 	// } catch (err) {
-// 	// 	console.error(err);
-// 	// }
-// });
-
 router.get("/postJob", (req, res) => {
 	fs.readFile("items.json", function(error, data) {
 		if (error) {
@@ -137,7 +121,6 @@ router.get("/postJob", (req, res) => {
 		}
 	})
 })
-
 
 
 // RETURNS ALL JOBS WITH 'TECH' CATEGORY

@@ -29,12 +29,20 @@ module.exports = async function callSO() {
 			created: new Moment(job.created).fromNow(),
 		});
 
-		importantSOInfo.push(job);
+		job.save();
+
+		
 	});
 
-	Job.insertMany(importantSOInfo, function (err) {
-		console.log(err);
-	});
+	// Job.insertMany(importantInfo, function (err) {
+    //     console.log(err);
+	// });
+	
+	// console.log(importantSOInfo);
+	// console.log('hello');
+	//Job.insertMany(importantSOInfo, function (err) {
+	//	console.log(err);
+	// });
 
 	//  importantSOInfo.forEach((job) => {
 	// 	 console.log(job);

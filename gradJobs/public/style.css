@@ -1,11 +1,9 @@
 body {
     margin: 30px;
     font-family:Arial;
+    background-color: #FEFEFE;
 }
 
-h1 {
-    color: #44C7B0;
-}
 
 .category {
     margin: 2px;
@@ -27,6 +25,11 @@ li > a {
 }
 
 li > a:hover {
+    color: #44C7B0;
+    font-weight: bold;
+}
+
+.apply {
     color: #44C7B0;
     font-weight: bold;
 }
@@ -91,19 +94,20 @@ td {
     width: 30%;
     position: relative;
     display: flex;
+    margin: 35px 0px;
   }
   
   .searchTerm {
     width: 100%;
-    border: 3px solid #F8F8F8	;
+    border: 3px solid #F4F4F4	;
     border-right: none;
     padding: 5px;
     height: 20px;
     border-radius: 2px 0 0 2px;
     outline: none;
     color: #9DBFAF;
-    background: #F8F8F8;
-    font-size: 16px;
+    background: #F4F4F4;
+    font-size: 14px;
   }
   
   .searchTerm:focus{
@@ -114,13 +118,13 @@ td {
   .searchButton {
     width: 40px;
     height: 36px;
-    border: 1px solid #F8F8F8;
+    border: 1px solid #F4F4F4;
     text-align: center;
     color: #fff;
     border-radius: 0 2px 2px 0;
     cursor: pointer;
     font-size: 20px;
-    background: #F8F8F8;
+    background: #F4F4F4;
   }
 
   .fa-search {
@@ -128,3 +132,13 @@ td {
     font-size: 20px;
 
   }
+
+  .formInput {
+    width: 30%;
+    margin: 10px 0px;
+    display: block;
+  }
+
+  h1 {
+    color: #44C7B0;
+}
