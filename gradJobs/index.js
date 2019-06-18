@@ -2,7 +2,6 @@
 if (process.env.NODE_ENV !== 'production') {
 	// if we are in development, load env file
 	require('dotenv').config();
-	console.log('dev');
 }
 
 const express = require("express");
