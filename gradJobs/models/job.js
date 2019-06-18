@@ -8,7 +8,7 @@ mongoose.set("useCreateIndex", true);
 
 // DEFINE THE JOB SCHEMA
 const jobSchema = new Schema({
-	id: mongoose.Schema.Types.ObjectId,
+	_id: mongoose.Schema.Types.ObjectId,
 	title: { type: String, required: true },
 	url: { 
 		type: String,
