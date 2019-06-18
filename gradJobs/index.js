@@ -14,7 +14,6 @@ const Job = require("./models/job");
 const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
-require("@fortawesome/fontawesome-free");
 require('jsdom-global')();
 
 // INIT THE APP
