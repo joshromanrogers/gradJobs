@@ -27,11 +27,13 @@ module.exports = async function reedCall() {
 
     var importantInfo = [];
 
+
     jsonData.results.forEach(job => {
         job.categories = 'tech';
     });
     jsonData.results.map(job => {
         job = new Job({
+            _id: new ObjectId(),
             title: job.jobTitle,
             url: job.jobUrl,
             categories: job.categories,

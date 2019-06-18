@@ -23,6 +23,7 @@ module.exports = async function callSO() {
 	feed.items.map(job => {
 
 		job = new Job({
+            _id: new ObjectId(),
 			title: job.title,
 			url: job.link,
 			categories: job.categories,

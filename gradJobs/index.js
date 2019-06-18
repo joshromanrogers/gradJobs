@@ -49,12 +49,12 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 setInterval(() => SOCall()
 	.catch(e => {
 		return e
-	}), 1800000);
+	}), 18000);
 
 setInterval(() => ReedCall()
 	.catch(e => {
 		return e
-	}), 1800000);
+	}), 18000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
