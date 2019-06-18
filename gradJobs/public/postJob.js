@@ -1,5 +1,5 @@
 let jobSubmit = document.getElementById("checkout-button-sku_FAq0aurWH7krHS");
-jobSubmit.onclick(() => purchaseClicked());
+jobSubmit.onclick = () => purchaseClicked();
 var stripeHandler = StripeCheckout.configure({
 	key: stripePublicKey,
 	locale: 'auto',
@@ -8,7 +8,7 @@ var stripeHandler = StripeCheckout.configure({
 	token: function (token) {
 
 	}
-})
+});
 
 function purchaseClicked() {
     // open stripe pop up box

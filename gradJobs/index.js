@@ -91,7 +91,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 // middleware that forwards /jobs requests to api/routes/jobs file
-app.use("/jobs", require("./api/routes/jobs"));
+app.use("/", require("./api/routes/jobs"));
 
 // if the request doesn't fit the above (/jobs), below code will take care of error
 app.use((req, res, next) => {
@@ -170,28 +170,6 @@ async function findJob(id) {
 // 		runScripts: 'dangerously',
 // 		resources: "usable"
 // 	};
-
-
-// let jobSubmit = document.getElementById("jobSubmit");
-// console.log(jobSubmit);
-
-// function purchaseClicked() {
-// 	// open stripe pop up box
-// 	const price = 8900;
-// 	stripeHandler.open({
-// 		amount: price
-// 	})
-// }
-
-// var stripeHandler = StripeCheckout.configure({
-// 	key: stripePublicKey,
-// 	locale: 'auto',
-// 	// once everything has been confirmed, stripe was send back + call
-// 	// the below method for us
-// 	token: function (token) {
-
-// 	}
-// })
 
 const PORT = process.env.PORT || 2000;
 
