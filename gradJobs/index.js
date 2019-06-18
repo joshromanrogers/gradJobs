@@ -17,16 +17,11 @@ const bodyParser = require("body-parser");
 require("@fortawesome/fontawesome-free");
 require('jsdom-global')();
 
-// const MDB = process.env.MONGO_ATLAS_PW;
-
-// console.log("mdb = ", MDB);
 // INIT THE APP
 const app = express();
 
-// console.log(process.env.MONGO_ATLAS_PW);
-
 // CONNECT TO MONGODB W/ MONGOOSE
-mongoose.connect("mongodb+srv://romanrogers:vOIcXjI7x0E27LfT@cluster0-xcfmt.mongodb.net/test?retryWrites=true", {
+mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true&w=majority", {
 	useNewUrlParser: true
 });
 
