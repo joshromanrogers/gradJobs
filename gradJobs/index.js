@@ -48,15 +48,15 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 // app.use(flash());
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
-// setInterval(() => SOCall()
-// 	.catch(e => {
-// 		return e
-// 	}), 10000);
+setInterval(() => SOCall()
+	.catch(e => {
+		return e
+	}), 1800000);
 
-// setInterval(() => ReedCall()
-// 	.catch(e => {
-// 		return e
-// 	}), 10000);
+setInterval(() => ReedCall()
+	.catch(e => {
+		return e
+	}), 1800000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
