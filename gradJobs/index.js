@@ -1,8 +1,8 @@
 // check to see if we are working in development of production environment
-// if (process.env.NODE_ENV !== 'production') {
-// 	// if we are in development, load env file
-// 	require('dotenv').config();
-// }
+if (process.env.NODE_ENV !== 'production') {
+	// if we are in development, load env file
+	require('dotenv').config();
+}
 
 const express = require("express");
 var request = require("request");
@@ -171,4 +171,6 @@ async function findJob(id) {
 // 		resources: "usable"
 // 	};
 
-app.listen(process.env.PORT || 2000, () => console.log(`Server started on port ${process.env.PORT}`));
+let port = process.env.PORT || 2000;
+
+app.listen(port, () => console.log(`Server started on port ${port}`));
