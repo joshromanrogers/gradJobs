@@ -27,7 +27,7 @@
     "stripe": "^7.1.0"
   },
   "devDependencies": {
-    "@fontawesome/fontawesome-free": "^5.8.2",
+    "@fortawesome/fontawesome-free": "^5.8.2",
     "dotenv": "^8.0.0",
     "jsdom": "15.1.1",
     "jsdom-global": "3.0.2",
