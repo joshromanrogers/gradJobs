@@ -6,7 +6,7 @@ var stripeHandler = StripeCheckout.configure({
 	// once everything has been confirmed, stripe was send back + call
 	// the below method for us
 	token: function (token) {
-
+		console.log("confirmed, now add job to database.", token);
 	}
 });
 
