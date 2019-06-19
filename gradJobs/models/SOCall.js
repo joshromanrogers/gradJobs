@@ -20,10 +20,12 @@ module.exports = async function callSO() {
 		job.categories.push('tech');
 	});
 
-	feed.items.map(job => {
+	const jobs = await Job.find()
+    const jobUrls = jobs.map((job)=> job.url)
+
+	feed.items.filter((job)=> !jobUrls.includes(job.link)).map(job => {
 
 		job = new Job({
-            _id: new ObjectId(),
 			title: job.title,
 			url: job.link,
 			categories: job.categories,

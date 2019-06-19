@@ -18,8 +18,11 @@ const bodyParser = require("body-parser");
 // INIT THE APP
 const app = express();
 
+// console.log(encodeURIComponent(process.env.MONGO_ATLAS_PW));
+
+
 // CONNECT TO MONGODB W/ MONGOOSE
-mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.MONGO_ATLAS_PW) + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://romanr:" + process.env.MONGO_ATLAS_PW + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true&w=majority", {
 	useNewUrlParser: true
 });
 
@@ -30,20 +33,21 @@ mongoose.connect("mongodb+srv://romanrogers:" + encodeURIComponent(process.env.M
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
-console.log(stripeSecretKey, stripePublicKey);
+//console.log(stripeSecretKey, stripePublicKey);
 
 const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 
-(async () => {
-  const charge = await stripe.charges.create({
-    amount: 999,
-    currency: 'usd',
-    source: 'tok_visa',
-    receipt_email: 'jenny.rosen@example.com',
-  });
-})();
+// (async () => {
+//   const charge = await stripe.charges.create({
+//     amount: 999,
+//     currency: 'usd',
+//     source: 'tok_visa',
+//     receipt_email: 'jenny.rosen@example.com',
+//   });
+// })();
 
 // app.use(flash());
+console.log('start');
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
 setInterval(() => SOCall()
