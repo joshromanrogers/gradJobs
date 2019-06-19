@@ -86,10 +86,15 @@ a.button:hover {
 table {
     table-layout: fixed;
     border-spacing: 0px;
+    border-collapse: collapse;
 }
 
 td {
     padding: 10px 0;
+  }
+
+  tr {
+    border-bottom: 1pt solid black;
   }
 
   .search {
