@@ -29,6 +29,7 @@ module.exports = async function callSO() {
 			title: job.title,
 			url: job.link,
 			categories: job.categories,
+			description: job.description,
 			created: new Moment(job.created).fromNow(),
 		});
 

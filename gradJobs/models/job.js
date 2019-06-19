@@ -15,6 +15,7 @@ const jobSchema = new Schema({
 		index: true,
 		required: true },
 	categories: { type: Array, required: false},
+	description: { type: String, required: false },
 	created: { type: String, required: true},
 }, {
 	timestamps: true
