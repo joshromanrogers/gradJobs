@@ -53,12 +53,12 @@ console.log('start');
 setInterval(() => SOCall()
 	.catch(e => {
 		return e
-	}), 18000);
+	}), 1800000);
 
 setInterval(() => ReedCall()
 	.catch(e => {
 		return e
-	}), 18000);
+	}), 1800000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
