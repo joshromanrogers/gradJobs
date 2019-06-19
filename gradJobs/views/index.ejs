@@ -59,12 +59,9 @@
             <td><%= moment(d.createdAt).fromNow(true) %></td>
             <td><a class="apply" href=" <%= d.url %> ">Apply</a></td>
         </tr>
-        <tr class="description-row"">
+        <tr class="description-row">
             <td>
-                <div><%= d.title %></div>
-                <div>
-                    <a href=" <%= d.url %> ">Apply</a>
-                </div>
+                <div><%= d.description %></div>
             </td>
         </tr>
         <% }); %>
