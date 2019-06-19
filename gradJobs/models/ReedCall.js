@@ -39,7 +39,7 @@ module.exports = async function reedCall() {
             title: job.jobTitle,
             url: job.jobUrl,
             categories: job.categories,
-            description: job.description,
+            description: job.jobDescription,
             created: new Moment(job.created).fromNow(),
         });
         job.save();
