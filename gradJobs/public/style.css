@@ -50,6 +50,11 @@ li > a:hover {
     color: #44C7B0;
 }
 
+.main-row {
+  cursor: pointer;
+  background-color: #F4F4F4;
+}
+
 .description-row {
     display: none;
 }
@@ -78,12 +83,9 @@ a.button:hover {
 	background-color:#5cbf2a;
 }
 
-
-
-
 table {
     table-layout: fixed;
-    border-spacing: 10px;
+    border-spacing: 0px;
 }
 
 td {
