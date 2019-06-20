@@ -32,11 +32,11 @@
     -->
   <form class="jobSubmitForm" action="/jobs/postJob/" method="post">
     <label for="title">Title</label>
-    <input class="searchTerm formInput" type="text" name="title"><br>
+    <input class="searchTerm formInput" type="text" name="title" id="title"><br>
     <label for="url">URL</label>
-    <input class="searchTerm formInput" type="text" name="url"><br>
+    <input class="searchTerm formInput" type="text" name="url" id="url"><br>
     <label for="categories">Categories</label>
-    <input class="searchTerm formInput" type="text" name="categories"><br>
+    <input class="searchTerm formInput" type="text" name="categories" id="category"><br>
     
   </form>
 
@@ -84,6 +84,14 @@
           // error, display the localized error message to your customer.
           var displayError = document.getElementById('error-message');
           displayError.textContent = result.error.message;
+        }else{
+
+          const title = document.getElementById('title').value
+          const url = document.getElementById('url').value
+          const category = document.getElementById('category').value
+
+          console.log("=========", title, url, category)
+
         }
       });
   });

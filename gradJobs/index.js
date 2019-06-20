@@ -14,6 +14,7 @@ const Job = require("./models/job");
 const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
+var cron = require('node-cron');
 
 // INIT THE APP
 const app = express();
@@ -22,7 +23,7 @@ const app = express();
 
 
 // CONNECT TO MONGODB W/ MONGOOSE
-mongoose.connect("mongodb+srv://romanr:" + process.env.MONGO_ATLAS_PW + "@cluster0-xcfmt.mongodb.net/test?retryWrites=true&w=majority", {
+mongoose.connect(process.env.MONGO_ATLAS_URL, {
 	useNewUrlParser: true
 });
 
@@ -49,16 +50,32 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 // app.use(flash());
 console.log('start');
 
-// FUNCTIONS THAT COMPLETE API + RSS CALLS
-setInterval(() => SOCall()
-	.catch(e => {
-		return e
-	}), 1800000);
 
-setInterval(() => ReedCall()
-	.catch(e => {
-		return e
-	}), 1800000);
+// FUNCTIONS THAT COMPLETE API + RSS CALLS
+// SCHEDULE TASKS WITH NODE-CRON
+
+cron.schedule('* * * * *', () => {
+	console.log('======= cron running')
+	SOCall()
+		.catch(e => {
+			return e
+		});
+	ReedCall()
+		.catch(e => {
+			return e
+		})
+
+});
+
+// setInterval(() => SOCall()
+// 	.catch(e => {
+// 		return e
+// 	}), 1800000);
+
+// setInterval(() => ReedCall()
+// 	.catch(e => {
+// 		return e
+// 	}), 1800000);
 
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
