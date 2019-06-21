@@ -1,8 +1,4 @@
-// check to see if we are working in development of production environment
-if (process.env.NODE_ENV !== 'production') {
-	// if we are in development, load env file
-	require('dotenv').config();
-}
+
 
 const express = require("express");
 var request = require("request");
@@ -21,11 +17,21 @@ const app = express();
 
 // console.log(encodeURIComponent(process.env.MONGO_ATLAS_PW));
 
-
-// CONNECT TO MONGODB W/ MONGOOSE
+// check to see if we are working in development of production environment
+if (process.env.NODE_ENV === 'development') {
+	// if we are in development, load env file
+	require('dotenv').config();
+	// Define the development db
+	dbName = 'database1';
+	// CONNECT TO MONGODB W/ MONGOOSE
 mongoose.connect(process.env.MONGO_ATLAS_URL, {
 	useNewUrlParser: true
 });
+} else if (process.env.NODE_ENV === 'production') {
+	// Define the production db
+	dbName = 'database2';
+}
+
 
 // STRIPE
 
