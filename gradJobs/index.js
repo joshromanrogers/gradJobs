@@ -14,10 +14,6 @@ const config = require('./config')[process.env.NODE_ENV];
 // INIT THE APP
 const app = express();
 
-// console.log(encodeURIComponent(process.env.MONGO_ATLAS_PW));
-
-// check to see if we are working in development of production environment
-
 // CONNECT TO MONGODB W/ MONGOOSE
 mongoose.connect(config.dbConnection, {
 	useNewUrlParser: true
@@ -25,12 +21,8 @@ mongoose.connect(config.dbConnection, {
 
 // STRIPE
 
-// Set your secret key: remember to change this to your live secret key in production
-// See your keys here: https://dashboard.stripe.com/account/apikeys
-
 const stripeSecretKey = config.STRIPE_SECRET_KEY;
 const stripePublicKey = config.STRIPE_PUBLIC_KEY;
-//console.log(stripeSecretKey, stripePublicKey);
 
 const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 
@@ -42,10 +34,6 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 //     receipt_email: 'jenny.rosen@example.com',
 //   });
 // })();
-
-// app.use(flash());
-console.log('start');
-
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
 // SCHEDULE TASKS WITH NODE-CRON
@@ -63,24 +51,12 @@ cron.schedule('* * * * *', () => {
 
 });
 
-// setInterval(() => SOCall()
-// 	.catch(e => {
-// 		return e
-// 	}), 1800000);
-
-// setInterval(() => ReedCall()
-// 	.catch(e => {
-// 		return e
-// 	}), 1800000);
-
-
 // SPECIFY VIEW ENGINE + RENDER TO THE USER
 app.set("view engine", "ejs");
 
 // SET STATIC FOLDER, SERVERS STATIC FILES FROM PUBLIC FOLDER TO USER (EG. INDEX.HTML)
 app.use(express.static(path.join(__dirname, "public")));
 
-//
 // middlewares
 app.use(morgan("dev"));
 app.use(express.json());
@@ -174,17 +150,6 @@ async function findJob(id) {
 		process.exit();
 	}
 }
-
-// let jsdom = require('jsdom').JSDOM,
-
-// 	// the file I will be loading
-// 	uri = 'views/index.ejs',
-
-// 	// the options that I will be giving to jsdom
-// 	options = {
-// 		runScripts: 'dangerously',
-// 		resources: "usable"
-// 	};
 
 let port = process.env.PORT || 2000;
 
