@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 var request = require("request");
 const path = require("path");
@@ -11,6 +9,7 @@ const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
 var cron = require('node-cron');
+const config = require('./config')[process.env.NODE_ENV];
 
 // INIT THE APP
 const app = express();
@@ -18,28 +17,19 @@ const app = express();
 // console.log(encodeURIComponent(process.env.MONGO_ATLAS_PW));
 
 // check to see if we are working in development of production environment
-if (process.env.NODE_ENV === 'development') {
-	// if we are in development, load env file
-	require('dotenv').config();
-	// Define the development db
-	dbName = 'database1';
-	// CONNECT TO MONGODB W/ MONGOOSE
-mongoose.connect(process.env.MONGO_ATLAS_URL, {
+
+// CONNECT TO MONGODB W/ MONGOOSE
+mongoose.connect(config.dbConnection, {
 	useNewUrlParser: true
 });
-} else if (process.env.NODE_ENV === 'production') {
-	// Define the production db
-	dbName = 'database2';
-}
-
 
 // STRIPE
 
 // Set your secret key: remember to change this to your live secret key in production
 // See your keys here: https://dashboard.stripe.com/account/apikeys
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
+const stripeSecretKey = config.STRIPE_SECRET_KEY;
+const stripePublicKey = config.STRIPE_PUBLIC_KEY;
 //console.log(stripeSecretKey, stripePublicKey);
 
 const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
