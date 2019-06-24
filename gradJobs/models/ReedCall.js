@@ -12,7 +12,7 @@ module.exports = async function reedCall() {
     // fetch request data
     let username = "417100be-8a8c-46f8-8663-ef89647a035e";
     let password = "";
-    let url = "https://www.reed.co.uk/api/1.0/search?keywords=graduate&location=London";
+    let url = "https://www.reed.co.uk/api/1.0/search?keywords=graduate&locationName=London";
 
     // await result of calling fetch request w/ an authentication header
     // and then store results in 'data' variable

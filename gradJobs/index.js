@@ -26,15 +26,6 @@ const stripePublicKey = config.STRIPE_PUBLIC_KEY;
 
 const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 
-// (async () => {
-//   const charge = await stripe.charges.create({
-//     amount: 999,
-//     currency: 'usd',
-//     source: 'tok_visa',
-//     receipt_email: 'jenny.rosen@example.com',
-//   });
-// })();
-
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
 // SCHEDULE TASKS WITH NODE-CRON
 
