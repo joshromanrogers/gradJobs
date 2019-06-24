@@ -13,6 +13,8 @@ const Job = require("../../models/job");
 const mongoose = require("mongoose");
 var Moment = require("moment");
 const reg = require("../../util/regex");
+const bodyParser = require("body-parser");
+
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
@@ -107,6 +109,38 @@ router.post("/postJob", (req, res, next) => {
 
 
 });
+
+// WEBHOOK ENDPOINT
+// Match the raw body to content type application/json
+router.post('/webhook', bodyParser.raw({type: 'application/json'}), (request, response) => {
+	let event;
+  
+	try {
+	  event = JSON.parse(request.body);
+	}
+	catch (err) {
+	  response.status(400).send(`Webhook Error: ${err.message}`);
+	}
+  
+	// Handle the event
+	switch (event.type) {
+	  case 'payment_intent.succeeded':
+		const paymentIntent = event.data.object;
+		handlePaymentIntentSucceeded(paymentIntent);
+		break;
+	  case 'payment_method.attached':
+		const paymentMethod = event.data.object;
+		handlePaymentMethodAttached(paymentMethod);
+		break;
+	  // ... handle other event types
+	  default:
+		// Unexpected event type
+		return response.status(400).end();
+	}
+  
+	// Return a response to acknowledge receipt of the event
+	response.json({received: true});
+  });
 
 router.get("/postJob", (req, res) => {
 	fs.readFile("items.json", function(error, data) {
