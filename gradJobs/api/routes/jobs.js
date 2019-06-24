@@ -179,7 +179,8 @@ router.get("/:name", (req, res) => {
 			});
 		}
 	});
-})
+});
+
 
 // RETURNS ALL JOBS WITH 'TECH' CATEGORY
 // data in resultArray[0] is apssed to index.ejs

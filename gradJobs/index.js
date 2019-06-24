@@ -100,48 +100,6 @@ const storeData = (data, path) => {
 	}
 };
 
-async function deleteAllJobs() {
-	try {
-		await Job.deleteMany({});
-		console.log('Done!');
-		// process.exit();
-	} catch (e) {
-		console.log(e);
-		process.exit();
-	}
-}
-
-// deleteAllJobs();
-
-// UPLOAD JOBS JSON TO MONGODB USING THE JOBS MODEL (GIVING THEM ID'S)
-async function loadJobs(jobs) {
-	try {
-		await Job.insertMany(jobs);
-		console.log('Done!');
-	} catch (e) {
-		console.log(e);
-		process.exit();
-	}
-}
-
-// FIND JOBS IN MONGODB USING THE JOBS MODEL 
-async function findJob(id) {
-	try {
-		await Job.findById(id, (err, job) => {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log(job);
-			}
-		});
-		console.log('Done!');
-		// process.exit();
-	} catch (e) {
-		console.log(e);
-		process.exit();
-	}
-}
-
 let port = process.env.PORT || 2000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
