@@ -1,10 +1,8 @@
 const express = require("express");
-var request = require("request");
 const path = require("path");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const morgan = require("morgan");
-const Job = require("./models/job");
 const SOCall = require("./models/SOCall");
 const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
@@ -30,15 +28,15 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 // SCHEDULE TASKS WITH NODE-CRON
 
 cron.schedule('* * * * *', () => {
-	console.log('======= cron running')
+	console.log('======= cron running');
 	SOCall()
 		.catch(e => {
-			return e
+			return e;
 		});
 	ReedCall()
 		.catch(e => {
-			return e
-		})
+			return e;
+		});
 
 });
 
@@ -75,7 +73,7 @@ app.use(bodyParser.urlencoded({
 // middleware that forwards /jobs requests to api/routes/jobs file
 app.use("/", require("./api/routes/jobs"));
 
-// if the request doesn't fit the above (/jobs), below code will take care of error
+// if the request doesn't fit the above (./api/routes/jobs), below code will take care of error
 app.use((req, res, next) => {
 	const error = new Error("Not Found");
 	error.status = 404;
