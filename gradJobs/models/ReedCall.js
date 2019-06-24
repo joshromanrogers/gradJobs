@@ -33,7 +33,7 @@ module.exports = async function reedCall() {
     
     jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).map(job => {
         job = new Job({
-            title: job.jobTitle,
+            title: job.jobTitle.replace('Graduate',''),
             url: job.jobUrl,
             categories: job.categories,
             description: job.jobDescription,

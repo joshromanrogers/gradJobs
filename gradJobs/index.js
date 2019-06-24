@@ -27,7 +27,7 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
 // SCHEDULE TASKS WITH NODE-CRON
 
-cron.schedule('* * * * *', () => {
+cron.schedule('0 */30 * * * *', () => {
 	console.log('======= cron running');
 	SOCall()
 		.catch(e => {
