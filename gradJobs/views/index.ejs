@@ -43,19 +43,17 @@
     <!-- job table -->
     <table>
 
-    <colgroup>
-       <col span="1" style="width: 50%;">
-       <col span="1" style="width: 30%;">
-       <col span="1" style="width: 10%;">
-       <col span="1" style="width: 10%;">
+        <colgroup>
+            <col span="1" style="width: 50%;">
+            <col span="1" style="width: 30%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
 
-    </colgroup>
-
+        </colgroup>
         <% data.forEach(d => { %>
         <tr class="main-row">
             <td><b><%= d.title %></b></td>
             <td><%= d.categories %></td>
-
             <td><%= moment(d.createdAt).fromNow(true) %></td>
             <td><a class="apply" href=" <%= d.url %> ">Apply</a></td>
         </tr>
@@ -72,10 +70,6 @@
     <script type=" module" src="../index.js">
             </script>
             <script type="text/javascript" src="/script.js"></script>
-            <script type="module" src="../util/regex.js"></script>
-            <!-- <script type="text/javascript" src="../index.js"></script> -->
-
-
 </body>
 
 </html>
