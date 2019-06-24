@@ -153,14 +153,16 @@ router.get("/postJob", (req, res) => {
 			})
 		}
 	})
-})
+});
 
 
-// RETURNS ALL JOBS WITH 'TECH' CATEGORY
+// DYNAMICALLY RETURNS ALL JOBS W/ A CATEGORY THAT IS EQUAL TO THE PARAM NAME
 // data in resultArray[0] is apssed to index.ejs
-router.get("/tech", (req, res) => {
+router.get("/:name", (req, res) => {
+	let cat = req.params.name;
+
 	Job.find({
-		categories: "tech"
+		categories: cat
 	}, null, {
 		sort: {
 			date: 1
@@ -177,7 +179,30 @@ router.get("/tech", (req, res) => {
 			});
 		}
 	});
-});
+})
+
+// RETURNS ALL JOBS WITH 'TECH' CATEGORY
+// data in resultArray[0] is apssed to index.ejs
+// router.get("/tech", (req, res) => {
+// 	Job.find({
+// 		categories: "tech"
+// 	}, null, {
+// 		sort: {
+// 			date: 1
+// 		}
+// 	}, (err, jobs) => {
+// 		if (err) {
+// 			console.log(err);
+// 		} else {
+// 			resultArray = [];
+// 			resultArray.push(jobs);
+// 			res.render("index", {
+// 				data: resultArray[0],
+// 				moment: Moment
+// 			});
+// 		}
+// 	});
+// });
 
 // GET ALL JOBS
 // router.get("/", (req, res, next) => {
