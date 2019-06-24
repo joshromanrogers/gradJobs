@@ -12,7 +12,6 @@ const Job = require("../../models/job");
 // connecting to db
 const mongoose = require("mongoose");
 var Moment = require("moment");
-const reg = require("../../util/regex");
 const bodyParser = require("body-parser");
 
 
