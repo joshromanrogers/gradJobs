@@ -45,7 +45,7 @@ router.get("/", (req, res) => {
 	} else {
 		Job.find({}, null, {
 			sort: {
-				date: 1
+				createdAt: -1
 			}
 		}, (err, jobs) => {
 			if (err) {
