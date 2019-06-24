@@ -4,9 +4,9 @@ const Job = require("./job");
 var Moment = require('moment');
 
 // 1. GET DATA FROM REED API
+// 2. IF WE HAVE A NEW JOB (NO DOCUMENT W/ THAT URL ALREADY IN COLLECTION)
 // 2. CREATE CATEGORIES PROPERTY + ADD TECH TO EACH DOCUMENT
-// 3. COMPILE MODEL FROM SCHEMA FOR EACH DOCUMENT
-// 4. INSERT ARRAY OF JOBS TO DATABASE
+// 3. COMPILE MODEL FROM SCHEMA + SAVE FOR EACH DOCUMENT
 
 module.exports = async function reedCall() {
     // fetch request data
@@ -25,9 +25,6 @@ module.exports = async function reedCall() {
     // json() returns a promise that resolves w/ the result of parsing body text as JSON
     const jsonData = await data.json();
 
-    var importantInfo = [];
-
-
     jsonData.results.forEach(job => {
         job.categories = 'tech';
     });
@@ -45,62 +42,4 @@ module.exports = async function reedCall() {
         job.save();
     });
 
-    // Job.insertMany(importantInfo, function (err) {
-    //     console.log(err);
-    // });
-
 };
-
-
-// var importantInfo = [];
-
-// data.results.forEach(job => {
-//     job.categories = 'tech';
-// });
-
-// info.results.map(job => {
-
-//     job = new Job({
-//         title: job.jobTitle,
-//         url: job.jobUrl,
-//         categories: job.categories,
-//         created: new Moment(job.created).fromNow(),
-//     });
-
-//     importantInfo.push(job);
-// });
-
-// Job.insertMany(importantInfo, function (err) {
-//         console.log(err);
-//     })
-
-
-//     .catch(err => {
-//         console.log(err);
-//     })
-// };
-
-// importantInfo.forEach((job) => {
-//     let query = {};
-//     let update = {
-//         title: job.jobTitle,
-//         url: job.jobUrl,
-//         categories: job.categories,
-//         created: new Moment(job.created).fromNow(),
-//     };
-//     let options = {
-//         upsert: true,
-//         new: true,
-//         setDefaultsOnInsert: false,
-//     };
-//     Job.findOneAndUpdate(query, update, options)
-//         .then((done) => {
-//             console.log('inserted' + done);
-//         });
-// })
-
-// Job.updateMany(importantInfo, {
-//     $setOnInsert: importantInfo
-// }, {
-//     upsert: true
-// });
