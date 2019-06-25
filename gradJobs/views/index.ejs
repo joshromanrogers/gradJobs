@@ -58,7 +58,9 @@
             <td class="mdl-data-table__cell--non-numeric"><b><%= d.title %></b></td>
             <td class="mdl-data-table__cell--non-numeric">
                 <% d.categories.forEach(c => { %>
-                <a href="/<%= c %>" class="job-category"><%= c %></a>
+                <a href="/<%= c %>" class="job-category mdl-chip">
+                    <span class="mdl-chip__text"> <%= c %> </span>
+                </a>
                 <% }) %>
             </td>
             <td class="mdl-data-table__cell--non-numeric"><%= moment(d.createdAt).fromNow(true) %></td>
