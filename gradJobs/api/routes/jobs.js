@@ -165,7 +165,7 @@ router.get("/:name", (req, res) => {
 		categories: cat
 	}, null, {
 		sort: {
-			date: 1
+			date: -1
 		}
 	}, (err, jobs) => {
 		if (err) {
