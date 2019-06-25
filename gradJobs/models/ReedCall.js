@@ -28,11 +28,19 @@ module.exports = async function reedCall() {
     // jsonData.results.forEach(job => {
     //     job.categories = 'tech';
     // });
-    
-    const jobs = await Job.find()
-    const jobUrls = jobs.map((job)=> job.url)
+
+    const jobs = await Job.find();
+    const jobUrls = jobs.map((job)=> job.url);
     
     jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).map(job => {
+
+        // let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
+        // 'analyst', 'finance', 'sales', 'human resources'];
+
+        // let jobTitle = job.jobTitle.toLowerCase();
+
+        // if (categoriesArray.includes(jobTitle))
+
         job = new Job({
             title: job.jobTitle.replace('Graduate',''),
             url: job.jobUrl,
