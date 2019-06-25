@@ -42,7 +42,7 @@ module.exports = async function reedCall() {
         // if (categoriesArray.includes(jobTitle))
 
         job = new Job({
-            title: job.jobTitle.replace('Graduate',''),
+            title: job.jobTitle.replace('Graduate','').toLowerCase(),
             url: job.jobUrl,
             categories: job.categories,
             description: job.jobDescription,

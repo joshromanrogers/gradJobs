@@ -55,7 +55,7 @@
         </colgroup>
         <% data.forEach(d => { %>
         <tr class="main-row">
-            <td class="mdl-data-table__cell--non-numeric description-wrap"><b><%= d.title %></b></td>
+            <td class="mdl-data-table__cell--non-numeric description-wrap capitalise"><b><%= d.title %></b></td>
             <td class="mdl-data-table__cell--non-numeric description-wrap">
                 <% d.categories.forEach(c => { %>
                 <a href="/<%= c %>" class="mdl-chip">

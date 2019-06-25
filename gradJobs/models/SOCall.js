@@ -25,8 +25,16 @@ module.exports = async function callSO() {
 
 	feed.items.filter((job)=> !jobUrls.includes(job.link)).map(job => {
 
+		// splits title string into title and company
+		// need to add company name to job schema before this can be implemented
+
+		// let jobTitle = job.title;
+		// let jobTitleArray = jobTitle.split(" at ");
+		// let jobTitle = jobTitleArray[0];
+		// let jobCompany = jobTitleArray[1].replace(/ *\([^)]*\) */g, "");
+
 		job = new Job({
-			title: job.title,
+			title: job.title.toLowerCase(),
 			url: job.link,
 			categories: job.categories,
 			description: job.description,
