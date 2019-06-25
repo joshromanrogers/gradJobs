@@ -13,11 +13,15 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- MDL -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
 
 <body>
     <h1>GradJobs🎓</h1>
-    <a href="/postJob" class="button">Post A Job</a>
+    <a href="/postJob" class="button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Post A Job</a>
 
     <!-- search bar -->
     <form action="/" method="GET">
@@ -40,7 +44,7 @@
     </ul>
 
     <!-- job table -->
-    <table>
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
         <colgroup>
             <col span="1" style="width: 50%;">
@@ -51,26 +55,26 @@
         </colgroup>
         <% data.forEach(d => { %>
         <tr class="main-row">
-            <td><b><%= d.title %></b></td>
-            <td>
+            <td class="mdl-data-table__cell--non-numeric"><b><%= d.title %></b></td>
+            <td class="mdl-data-table__cell--non-numeric">
                 <% d.categories.forEach(c => { %>
                 <a href="/<%= c %>" class="job-category"><%= c %></a>
                 <% }) %>
             </td>
-            <td><%= moment(d.createdAt).fromNow(true) %></td>
-            <td><a class="apply" href=" <%= d.url %> ">Apply</a></td>
+            <td class="mdl-data-table__cell--non-numeric"><%= moment(d.createdAt).fromNow(true) %></td>
+            <td class="mdl-data-table__cell--non-numeric"><a class="apply" href=" <%= d.url %> ">APPLY</a></td>
         </tr>
-        <tr class="description-row"">
+        <tr class="description-row">
             <td>
-                <div><%= d.description %></div>
+                <div class="mdl-data-table__cell--non-numeric description-wrap"><%= d.description %></div>
             </td>
         </tr>
         <% }); %>
 
     </table>
     <script type=" module" src="../index.js">
-            </script>
-            <script type="text/javascript" src="/script.js"></script>
+    </script>
+    <script type="text/javascript" src="/script.js"></script>
 </body>
 
 </html>
