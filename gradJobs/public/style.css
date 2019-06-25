@@ -58,6 +58,10 @@ li>a:hover {
   display: none;
 }
 
+.mdl-chip:hover {
+  background-color: #44C7B0;
+}
+
 a.button {
 
   text-decoration: none;
