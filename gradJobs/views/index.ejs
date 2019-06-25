@@ -53,7 +53,11 @@
         <% data.forEach(d => { %>
         <tr class="main-row">
             <td><b><%= d.title %></b></td>
-            <td><%= d.categories %></td>
+            <td>
+                <% d.categories.forEach(c => { %>
+                <a href="/<%= c %>" class="job-category"><%= c %></a>
+                <% }) %>
+            </td>
             <td><%= moment(d.createdAt).fromNow(true) %></td>
             <td><a class="apply" href=" <%= d.url %> ">Apply</a></td>
         </tr>
