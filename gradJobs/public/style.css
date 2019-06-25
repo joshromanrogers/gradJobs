@@ -19,14 +19,13 @@ li > a {
     color: #909090;
 }
 
-.active {
-    color: #44C7B0;
-    font-weight: bold;
+li > a:active {
+  color: #44C7B0;
+  font-weight: bold;
 }
 
 li > a:hover {
     color: #44C7B0;
-    font-weight: bold;
 }
 
 .apply {

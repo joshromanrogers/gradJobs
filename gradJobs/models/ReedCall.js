@@ -25,9 +25,10 @@ module.exports = async function reedCall() {
     // json() returns a promise that resolves w/ the result of parsing body text as JSON
     const jsonData = await data.json();
 
-    jsonData.results.forEach(job => {
-        job.categories = 'tech';
-    });
+    // jsonData.results.forEach(job => {
+    //     job.categories = 'tech';
+    // });
+    
     const jobs = await Job.find()
     const jobUrls = jobs.map((job)=> job.url)
     

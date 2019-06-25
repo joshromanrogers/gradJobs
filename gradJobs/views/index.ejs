@@ -24,7 +24,6 @@
         <div class="search">
             <input class="searchTerm" type="text" name="search" placeholder="">
             <button class="searchButton" type="submit" value="search">
-                <%# <i class="fa fa-search"></i> %>
                 🔍
             </button>
         </div>
@@ -32,7 +31,7 @@
 
     <!-- categories -->
     <ul class="categories-container">
-        <li class="active category"><a href="/">All</a></li>
+        <li class="category"><a href="/">All</a></li>
         <li class="category"><a href="/tech">Tech</a></li>
         <li class="category"><a href="/design">Design</a></li>
         <li class="category"><a href="/finance">Finance</a></li>
@@ -64,11 +63,9 @@
         <tr class="description-row"">
             <td>
                 <div><%= d.description %></div>
-
             </td>
         </tr>
         <% }); %>
-
 
     </table>
     <script type=" module" src="../index.js">
