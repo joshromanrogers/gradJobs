@@ -29,7 +29,6 @@ li>a:hover {
 }
 
 .apply {
-  color: #44C7B0;
   font-weight: bold;
 }
 
@@ -60,6 +59,11 @@ li>a:hover {
 
 .mdl-chip:hover {
   background-color: #44C7B0;
+  color: white;
+}
+
+.capitalise {
+  text-transform: capitalize;   
 }
 
 a.button {

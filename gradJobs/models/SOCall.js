@@ -28,13 +28,14 @@ module.exports = async function callSO() {
 		// splits title string into title and company
 		// need to add company name to job schema before this can be implemented
 
-		// let jobTitle = job.title;
-		// let jobTitleArray = jobTitle.split(" at ");
-		// let jobTitle = jobTitleArray[0];
-		// let jobCompany = jobTitleArray[1].replace(/ *\([^)]*\) */g, "");
+		let jobTitle = job.title;
+		let jobTitleArray = jobTitle.split(" At ");
+		let jobTitle = jobTitleArray[0];
+		let jobCompany = jobTitleArray[1].replace(/ *\([^)]*\) */g, "");
 
 		job = new Job({
-			title: job.title.toLowerCase(),
+			title: jobTitle.toLowerCase(),
+			company: jobCompany,
 			url: job.link,
 			categories: job.categories,
 			description: job.description,

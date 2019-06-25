@@ -7,6 +7,7 @@ mongoose.set("useCreateIndex", true);
 // DEFINE THE JOB SCHEMA
 const jobSchema = new Schema({
 	title: { type: String, required: true },
+	company: {type: String, required: false },
 	url: { 
 		type: String,
 		unique: true,
