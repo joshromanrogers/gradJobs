@@ -78,11 +78,16 @@ a.button {
   border-radius: 2px;
   display: inline-block;
   cursor: pointer;
+  background-color: #44C7B0!important;
   color: #ffffff;
   font-size: 20px;
   font-weight: bold;
-  padding: 14px 24px;
   text-decoration: none;
+}
+
+#postJob {
+  width: 120px;
+  height: 36px;
 }
 
 .mdl-button--colored {
@@ -148,10 +153,6 @@ table {
   display: block;
 }
 
-h1 {
-  color: #44C7B0;
-}
-
 table {
   width: 100%;
 }
@@ -178,4 +179,15 @@ table {
 
 .description-column {
   width: 200%;
+}
+
+h3 {
+  color: #44C7B0;
+  font-family: Arial;
+  font-size: 30px;
+  margin-left: 2%!important;
+}
+
+.search {
+  margin-left: 2%;
 }
