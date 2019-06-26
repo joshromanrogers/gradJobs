@@ -25,8 +25,6 @@ module.exports = async function callSO() {
 
 	feed.items.filter((job)=> !jobUrls.includes(job.link)).forEach(job => {
 
-		
-
 		// splits title string into title and company
 		let jobTitle = job.title;
 		let jobTitleArray = jobTitle.split(" At ");

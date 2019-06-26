@@ -32,7 +32,7 @@ module.exports = async function reedCall() {
     const jobs = await Job.find();
     const jobUrls = jobs.map((job)=> job.url);
     
-    jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).map(job => {
+    jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).forEach(job => {
 
         // let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
         // 'analyst', 'finance', 'sales', 'human resources'];
