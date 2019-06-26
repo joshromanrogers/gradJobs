@@ -1,4 +1,4 @@
-module.exports = function findCategories(job) {
+module.exports = function findCategories(job, jobTitle) {
 	// array of different possible categories
 	let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
 		'analyst', 'finance', 'sales', 'human resources', 'accountant', 'admin', 
@@ -12,4 +12,6 @@ module.exports = function findCategories(job) {
 	let jobCategories = jobTitleWords.filter( item => {
 		return categoriesArray.includes(item);
 	});
+
+	return jobCategories;
 };

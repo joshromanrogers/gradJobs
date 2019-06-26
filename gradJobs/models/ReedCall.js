@@ -35,8 +35,10 @@ module.exports = async function reedCall() {
         // remove the word graduate from titles
         let jobTitle = job.jobTitle.replace('Graduate','');
 
-        let jobCategories = findCategories(job);
-
+        let jobCategories = findCategories(job, jobTitle);
+        console.log('=======');
+        console.log('title: ', jobTitle, 'url: ', job.jobUrl, 'categories: ', jobCategories,
+        'description: ', job.jobDescription);
         job = new Job({
             title: jobTitle,
             url: job.jobUrl,
