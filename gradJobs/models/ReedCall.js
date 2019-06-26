@@ -32,7 +32,9 @@ module.exports = async function reedCall() {
 
         // array of different possible categories
         let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
-        'analyst', 'finance', 'sales', 'human resources'];
+        'analyst', 'finance', 'sales', 'human resources', 'accountant', 'admin', 
+        'banking', 'education', 'marketing', 'health', 'medicine', 'media', 'retail',
+        'java', 'c++', 'c', 'angular', 'python'];
 
         // remove the word graduate from titles
         let jobTitle = job.jobTitle.replace('Graduate','');
