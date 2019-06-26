@@ -159,3 +159,23 @@ table {
 .description-wrap {
   white-space: normal;
 }
+
+.title-column {
+  width: 50%;
+}
+
+.categories-column {
+  width: 30%;
+}
+
+.time-column {
+  width: 10%;
+}
+
+.apply-column {
+  width: 10%;
+}
+
+.description-column {
+  width: 200%;
+}
