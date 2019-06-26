@@ -25,8 +25,9 @@ module.exports = async function callSO() {
 
 	feed.items.filter((job)=> !jobUrls.includes(job.link)).forEach(job => {
 
-		// splits title string into title and company
+		
 
+		// splits title string into title and company
 		let jobTitle = job.title;
 		let jobTitleArray = jobTitle.split(" At ");
 		jobTitle = jobTitleArray[0];
@@ -43,42 +44,6 @@ module.exports = async function callSO() {
 
 		job.save();
 
-		
 	});
-
-	// Job.insertMany(importantInfo, function (err) {
-    //     console.log(err);
-	// });
-	
-	// console.log(importantSOInfo);
-	// console.log('hello');
-	//Job.insertMany(importantSOInfo, function (err) {
-	//	console.log(err);
-	// });
-
-	//  importantSOInfo.forEach((job) => {
-	// 	 console.log(job);
-	// 	let query = {};
-	// 	let update = {
-	// 		title: job.title,
-	// 		url: job.url,
-	// 		categories: job.categories,
-	// 		created: new Moment(job.created).fromNow(),
-	// 	};
-	// 	let options = {
-	// 		upsert: true,
-	// 		new: true,
-	// 		setDefaultsOnInsert: false,
-	// 	};
-
-	// 	Job.findOneAndUpdate(query, update, options)
-	// 	.then((done) => {
-	// 		console.log('inserted' + done);
-	// 	});
-	// })
-
-	
-
-	// Job.update({}, importantSOInfo, {upsert: true});
 
 };
