@@ -47,12 +47,12 @@
     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
         <colgroup>
-            <col span="1" style="width: 50%;">
-            <col span="1" style="width: 30%;">
-            <col span="1" style="width: 10%;">
-            <col span="1" style="width: 10%;">
-
+            <col span="1" class="main-row" style="width: 50%;">
+            <col span="1" class="main-row" style="width: 30%;">
+            <col span="1" class="main-row" style="width: 10%;">
+            <col span="1" class="main-row" style="width: 10%;">
         </colgroup>
+
         <% data.forEach(d => { %>
         <tr class="main-row">
             <td class="mdl-data-table__cell--non-numeric description-wrap capitalise"><b><%= d.title %></b></td>

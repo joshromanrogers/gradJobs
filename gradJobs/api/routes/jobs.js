@@ -22,7 +22,6 @@ const stripePublicKey = process.env.STRIPE_PUBLIC_KEY;
 // 1. 'FIND' ALL DOCUMENTS OF THE JOBS COLLECTION
 // 2. SORT BY DATE
 // 3. PUSH TO ARRAY + SEND AS DATA VALUE TO INDEX.EJS TO BE DISPLAYED  :)
-let resultArray = [];
 router.get("/", (req, res) => {
 	// if user is using search bar, reg expression the query
 	// run a search for term with mongoose find function
@@ -51,9 +50,9 @@ router.get("/", (req, res) => {
 			if (err) {
 				console.log(err);
 			} else {
-				resultArray.push(jobs);
+				console.log(jobs);
 				res.render("index", {
-					data: resultArray[0],
+					data: jobs,
 					moment: Moment
 				});
 			}
@@ -165,16 +164,14 @@ router.get("/:name", (req, res) => {
 		categories: cat
 	}, null, {
 		sort: {
-			date: -1
+			createdAt: -1
 		}
 	}, (err, jobs) => {
 		if (err) {
 			console.log(err);
 		} else {
-			resultArray = [];
-			resultArray.push(jobs);
 			res.render("index", {
-				data: resultArray[0],
+				data: jobs,
 				moment: Moment
 			});
 		}

@@ -23,18 +23,18 @@ module.exports = async function callSO() {
 	const jobs = await Job.find()
     const jobUrls = jobs.map((job)=> job.url)
 
-	feed.items.filter((job)=> !jobUrls.includes(job.link)).map(job => {
+	feed.items.filter((job)=> !jobUrls.includes(job.link)).forEach(job => {
 
 		// splits title string into title and company
 		// need to add company name to job schema before this can be implemented
 
 		let jobTitle = job.title;
 		let jobTitleArray = jobTitle.split(" At ");
-		let jobTitle = jobTitleArray[0];
+		jobTitle = jobTitleArray[0];
 		let jobCompany = jobTitleArray[1].replace(/ *\([^)]*\) */g, "");
-
+		console.log(job);
 		job = new Job({
-			title: jobTitle.toLowerCase(),
+			title: job.title,
 			company: jobCompany,
 			url: job.link,
 			categories: job.categories,

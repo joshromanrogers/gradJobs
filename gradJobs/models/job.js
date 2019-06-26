@@ -16,6 +16,7 @@ const jobSchema = new Schema({
 	categories: { type: Array, required: false},
 	description: { type: String, required: false },
 	created: { type: String, required: true},
+	status: {type: String, required: true, default: 'scraped'} // 'scraped' 'not_confirmed' 'confirmed
 }, {
 	timestamps: true
 });
