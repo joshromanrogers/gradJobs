@@ -2,6 +2,8 @@ const fetch = require("node-fetch");
 var btoa = require('btoa');
 const Job = require("./job");
 var Moment = require('moment');
+const findCategories = require("../util/findCategories");
+
 
 // 1. GET DATA FROM REED API
 // 2. IF WE HAVE A NEW JOB (NO DOCUMENT W/ THAT URL ALREADY IN COLLECTION)
@@ -30,22 +32,10 @@ module.exports = async function reedCall() {
     
     jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).forEach(job => {
 
-        // array of different possible categories
-        let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
-        'analyst', 'finance', 'sales', 'human resources', 'accountant', 'admin', 
-        'banking', 'education', 'marketing', 'health', 'medicine', 'media', 'retail',
-        'java', 'c++', 'c', 'angular', 'python'];
-
         // remove the word graduate from titles
         let jobTitle = job.jobTitle.replace('Graduate','');
 
-        // title to lower case and then split words into an array
-        let jobTitleWords = jobTitle.toLowerCase().split(" ");
-        
-        // only keep the words that are in the categories array
-        let jobCategories = jobTitleWords.filter( item => {
-            return categoriesArray.includes(item);
-        })
+        let jobCategories = findCategories(job);
 
         job = new Job({
             title: jobTitle,
