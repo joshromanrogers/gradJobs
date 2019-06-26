@@ -25,26 +25,30 @@ module.exports = async function reedCall() {
     // json() returns a promise that resolves w/ the result of parsing body text as JSON
     const jsonData = await data.json();
 
-    // jsonData.results.forEach(job => {
-    //     job.categories = 'tech';
-    // });
-
     const jobs = await Job.find();
     const jobUrls = jobs.map((job)=> job.url);
     
     jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).forEach(job => {
 
-        // let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
-        // 'analyst', 'finance', 'sales', 'human resources'];
+        // array of different possible categories
+        let categoriesArray = ['javascript', 'recruitment', 'property', 'teaching', 
+        'analyst', 'finance', 'sales', 'human resources'];
 
-        // let jobTitle = job.jobTitle.toLowerCase();
+        // remove the word graduate from titles
+        let jobTitle = job.jobTitle.replace('Graduate','');
 
-        // if (categoriesArray.includes(jobTitle))
+        // title to lower case and then split words into an array
+        let jobTitleWords = jobTitle.toLowerCase().split(" ");
+        
+        // only keep the words that are in the categories array
+        let jobCategories = jobTitleWords.filter( item => {
+            return categoriesArray.includes(item);
+        })
 
         job = new Job({
-            title: job.jobTitle.replace('Graduate','').toLowerCase(),
+            title: jobTitle,
             url: job.jobUrl,
-            categories: job.categories,
+            categories: jobCategories,
             description: job.jobDescription,
             created: new Moment(job.created).fromNow(),
         });
