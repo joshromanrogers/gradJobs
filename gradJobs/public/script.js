@@ -1,6 +1,7 @@
 let mainRows = document.querySelectorAll(".main-row");
 let descriptionRows = document.querySelectorAll(".description-row");
 let applyButtons = document.querySelectorAll(".apply");
+let categoryButtons = document.querySelectorAll(".mdl-chip");
 
 mainRows.forEach(row => {
 	// If user clicks on row, display the description.
@@ -17,6 +18,13 @@ mainRows.forEach(row => {
 
 applyButtons.forEach(button => {
 	// stop description opening when user clicks apply button
+	button.onclick = () => {
+		event.stopPropagation();
+	};
+});
+
+categoryButtons.forEach(button => {
+	// stop description opening when user clicks category button
 	button.onclick = () => {
 		event.stopPropagation();
 	};
