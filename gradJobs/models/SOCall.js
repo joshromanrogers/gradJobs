@@ -26,14 +26,15 @@ module.exports = async function callSO() {
 	feed.items.filter((job)=> !jobUrls.includes(job.link)).forEach(job => {
 
 		// splits title string into title and company
-		let jobTitle = job.title;
-		let jobTitleArray = jobTitle.split(" At ");
-		jobTitle = jobTitleArray[0];
-		let jobCompany = jobTitleArray[1].replace(/ *\([^)]*\) */g, "");
+		// TypeError: Cannot read property 'replace' of undefined
+		// let jobTitle = job.title;
+		// let jobTitleArray = jobTitle.split(" At ");
+		// jobTitle = jobTitleArray[0];
+		// let jobCompany = jobTitleArray[1].replace(/ *\([^)]*\) */g, "");
 
 		job = new Job({
-			title: jobTitle,
-			company: jobCompany,
+			title: job.title,
+			// company: jobCompany,
 			url: job.link,
 			categories: job.categories,
 			description: job.description,

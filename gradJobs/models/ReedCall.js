@@ -33,7 +33,7 @@ module.exports = async function reedCall() {
     jsonData.results.filter((job)=> !jobUrls.includes(job.jobUrl)).forEach(job => {
 
         // remove the word graduate from titles
-        let jobTitle = job.jobTitle.replace('Graduate','');
+        let jobTitle = job.title.replace('Graduate','');
 
         let jobCategories = findCategories(job, jobTitle);
         console.log('=======');
