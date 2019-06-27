@@ -28,28 +28,32 @@ const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
 // TWITTER BOT
 // figure out a way of running the client.post when a new job is added to the database.
 
+let testerJob = {
+	title: "Front End Developer",
+	categories: ["java", "javascript"],
+	company: "Apple",
+	url: "https://stackoverflow.com/jobs/193045/qa-engineer-test-analyst-medical-management-systems"
+};
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
 // SCHEDULE TASKS WITH NODE-CRON
 // */30 * * * *
-cron.schedule('*/30 * * * *', () => {
+cron.schedule('* * * * *', () => {
 	console.log('======= cron running');
+	// Check StackOverflow RSS for new jobs
 	SOCall()
 		.catch(e => {
 			console.log(e);
 			return e;
 		});
+	// Check Reed API for new jobs
 	ReedCall()
 		.catch(e => {
 			console.log(e);
 			return e;
 		});
-	twitterBot()
-		.catch(e => {
-			console.log(e);
-			return e;
-		});
-
+	// // Run the Twitter Bot
+	// twitterBot(testerJob);
 });
 
 // SPECIFY VIEW ENGINE + RENDER TO THE USER

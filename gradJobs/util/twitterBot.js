@@ -8,13 +8,16 @@ var client = new Twitter({
 	access_token_secret: config.access_token_secret
 });
 
-module.exports = function twitterBot() {
-    console.log('doing it');
+
+
+module.exports = function twitterBot(job) {
+
 	let params = {
-		status: `I am a tweet ${Math.random()}`
+		status: `Company are looking for a ${job.title} #${job.categories[0]} #graduatejobs #londongraduates 🎓😍
+		${job.link}`
 	};
 
-	client.post('statuses/update', params, function (error, tweet, response) {
+	client.post('statuses/update', {status: params.status}, function (error, tweet, response) {
 		if (error) {
 			console.log(error);
 		}
