@@ -1,7 +1,7 @@
 let Parser = require('rss-parser');
 const Job = require("./job");
 var Moment = require('moment');
-const twitterBot = require("./util/twitterBot");
+const twitterBot = require("../util/twitterBot");
 
 // 1. GET DATA FROM STACK OVERFLOW RSS
 // 2. ADD TECH TO THE CATEGORIES ARRAY OF EACH DOCUMENT
