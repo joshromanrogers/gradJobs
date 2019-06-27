@@ -8,6 +8,7 @@ const ReedCall = require("./models/ReedCall");
 const bodyParser = require("body-parser");
 var cron = require('node-cron');
 const config = require('./config')[process.env.NODE_ENV];
+var Twitter = require('twitter');
 
 // INIT THE APP
 const app = express();
@@ -23,6 +24,24 @@ const stripeSecretKey = config.STRIPE_SECRET_KEY;
 const stripePublicKey = config.STRIPE_PUBLIC_KEY;
 
 const stripe = require('stripe')('sk_test_2v6OueuLFq5aIpKOdIMz86fy');
+
+// TWITTER BOT
+// figure out a way of running the client.post when a new job is added to the database.
+// {status: }
+
+// var client = new Twitter({
+// 	consumer_key: config.TWITTER_CONSUMER_KEY,
+// 	consumer_secret: config.TWITTER_CONSUMER_SECRET,
+// 	access_token_key: config.TWITTER_ACCESS_TOKEN_KEY,
+// 	access_token_secret: config.TWITTER_ACCESS_TOKEN_SECRET
+//   });
+
+//   let params = {status: 'I am a tweet'};
+//   client.post('statuses/update', params, function(error, tweet, response) {
+// 	if (!error) {
+// 	  console.log(tweet);
+// 	}
+//   });
 
 // FUNCTIONS THAT COMPLETE API + RSS CALLS
 // SCHEDULE TASKS WITH NODE-CRON
