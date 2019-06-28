@@ -60,18 +60,23 @@ router.get("/", (req, res) => {
 });
 
 // CREATE A NEW JOB
-router.post("/postJob", (req, res, next) => {
+router.post("/finishCheckout", (req, res, next) => {
 	const newJob = new Job({
 		_id: new mongoose.Types.ObjectId(),
 		title: req.body.title,
 		url: req.body.url,
 		categories: req.body.categories,
 		created: new Moment().fromNow(),
+		status: "not_confirmed"
 	});
 
 	newJob.save()
 		.then(result => {
-			res.status(201).json({
+			res.render('finishCheckout', {
+				_id: result._id,
+				stripePublicKey
+			});
+			/*.status(201).json({
 				message: "Handling POST request to /jobs",
 				createdJob: {
 					_id: result._id,
@@ -84,7 +89,7 @@ router.post("/postJob", (req, res, next) => {
 						url: "http://localhost:2000/jobs/" + result._id
 					}
 				}
-			});
+			});*/
 		})
 		.catch(err => {
 			console.log(err);

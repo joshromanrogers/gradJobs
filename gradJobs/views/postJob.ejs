@@ -20,12 +20,6 @@
   <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
   <script type="text/javascript" src="../index.js"></script>
-  <!-- Load Stripe.js on your website. -->
-  <script src="https://checkout.stripe.com/checkout.js" defer></script>
-  <script src="https://js.stripe.com/v3"></script>
-  <script>
-    var stripePublicKey = '<%= stripePublicKey %>';
-  </script>
 
 </head>
 
@@ -35,7 +29,7 @@
         form uses post method to send data to the server
         action is where it posts feedback 
     -->
-  <form class="jobSubmitForm" action="/jobs/postJob/" method="post">
+  <form class="jobSubmitForm" action="/finishCheckout/" method="post">
     <label for="title">Title</label>
     <input class="searchTerm formInput" type="text" name="title" id="title"><br>
     <label for="url">URL</label>
@@ -43,11 +37,13 @@
     <label for="categories">Categories</label>
     <input class="searchTerm formInput" type="text" name="categories" id="category"><br>
 
-  </form>
+  
 
-  <input id="checkout-button-sku_FAq0aurWH7krHS"
-    style="background-color:#44C7B0;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em" role="link"
-    type="submit" value="Post your job - £89">
+    <input id="checkout-button-sku_FAq0aurWH7krHS"
+      style="background-color:#44C7B0;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em" role="link"
+      type="submit" value="Post your job - £89">
+
+  </form>
 
 
   <div id="error-message"></div>
@@ -58,44 +54,3 @@
 </body>
 
 </html>
-
-
-<script>
-  var stripe = Stripe('pk_test_yzREq7vktDRVBcgUTVLqu5k7');
-
-  var checkoutButton = document.getElementById('checkout-button-sku_FAq0aurWH7krHS');
-  checkoutButton.addEventListener('click', function () {
-    // When the customer clicks on the button, redirect
-    // them to Checkout.
-    stripe.redirectToCheckout({
-        items: [{
-          sku: 'sku_FAq0aurWH7krHS',
-          quantity: 1
-        }],
-
-        // Do not rely on the redirect to the successUrl for fulfilling
-        // purchases, customers may not always reach the success_url after
-        // a successful payment.
-        // Instead use one of the strategies described in
-        // https://stripe.com/docs/payments/checkout/fulfillment
-        successUrl: 'https://gradjobs.io/success',
-        cancelUrl: 'https://gradjobs.io/canceled',
-      })
-      .then(function (result) {
-        if (result.error) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, display the localized error message to your customer.
-          var displayError = document.getElementById('error-message');
-          displayError.textContent = result.error.message;
-        } else {
-
-          const title = document.getElementById('title').value
-          const url = document.getElementById('url').value
-          const category = document.getElementById('category').value
-
-          console.log("=========", title, url, category)
-
-        }
-      });
-  });
-</script>

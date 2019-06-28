@@ -40,6 +40,7 @@ module.exports = async function callSO() {
 			categories: job.categories,
 			description: job.description,
 			created: new Moment(job.created).fromNow(),
+			status: "scraped"
 		});
 
 		job.save();

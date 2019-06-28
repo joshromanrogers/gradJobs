@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Post A Job</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="../public/imgs/gradJobsIcon.png">
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  <!-- MDL -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+  <script type="text/javascript" src="../index.js"></script>
+  <!-- Load Stripe.js on your website. -->
+  <script src="https://checkout.stripe.com/checkout.js" data-job-id="<%= _id %>" defer></script>
+  <script src="https://js.stripe.com/v3"></script>
+  <script>
+    var stripePublicKey = '<%= stripePublicKey %>';
+  </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+
+<script>
+  var stripe = Stripe('pk_test_yzREq7vktDRVBcgUTVLqu5k7');
+
+    stripe.redirectToCheckout({
+        items: [{
+          sku: 'sku_FAq0aurWH7krHS',
+          quantity: 1
+        }],
+
+        // Do not rely on the redirect to the successUrl for fulfilling
+        // purchases, customers may not always reach the success_url after
+        // a successful payment.
+        // Instead use one of the strategies described in
+        // https://stripe.com/docs/payments/checkout/fulfillment
+        successUrl: 'https://gradjobs.io/success',
+        cancelUrl: 'https://gradjobs.io/canceled',
+      })
+      .then(function (result) {
+        if (result.error) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer.
+          var displayError = document.getElementById('error-message');
+          displayError.textContent = result.error.message;
+        } else {
+
+          const title = document.getElementById('title').value
+          const url = document.getElementById('url').value
+          const category = document.getElementById('category').value
+
+          console.log("=========", title, url, category)
+
+        }
+      });
+  
+</script>
